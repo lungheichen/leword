@@ -1,5 +1,10 @@
 .App {
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  align-items: center;
+
+
 }
 
 .App-logo {
@@ -39,8 +44,8 @@
 
 .Keyboard {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 5px;
 
@@ -55,7 +60,7 @@
   height: 50px;
   background-color: #826cd3;
   border: 5px solid #bdd36c;
-  font-size: 20;
+  font-size: calc(10px + 2vmin);
   flex: 0 0 auto;
 }
 

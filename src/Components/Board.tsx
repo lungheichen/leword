@@ -10,21 +10,19 @@ function Board() {
   }
 
   const rows = []
-  for (let i = 0; i < 6; i++) {
+  const blanks = "     "
+  for (let i = 0; i < blanks.length; i++) {
     var row = 
       <Row
-        letters={"     "} 
+        letters={blanks} 
       />
     rows.push(row)
   }
   
 
   return (
-    <div>
-      <p>This is where the board goes</p>
-      <div className="Board">
-        {rows}
-      </div>
+    <div className="Board">
+      {rows}
     </div>
   );
 }
