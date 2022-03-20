@@ -40,6 +40,9 @@
 .Keyboard {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 
 }
 
@@ -58,17 +61,20 @@
 
 .Board {
   display: flex;
-  height: 600px;
-  gap: 60px 60px;
+  /* height: 400px; */
+  gap: 15px;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-
+  background-color: #1bcc73;
+  margin: 10px;
 }
 
-.BoardRow {
+.Row {
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
   margin: auto;
   float: left;
+  gap: 5px;
 }

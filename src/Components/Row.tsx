@@ -8,7 +8,7 @@ interface Letter {
 function Row(props: Letter) {
 
   const letters = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < props.letters.length; i++) {
     var key = 
       <Key 
         key={i}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Key from './Key';
+import Row from './Row';
 
 function Keyboard() {
   
@@ -9,8 +9,14 @@ function Keyboard() {
     <div>
       <p>This is where the keyboard goes</p>
       <div className="Keyboard">
-        <Key
-          letter="Q"
+        <Row
+          letters="QWERTYUIOP"
+        />
+        <Row
+          letters="ASDFGHJKL"
+        />
+        <Row
+          letters="ZXCVBNM"
         />
       </div>
     </div>
