@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import Row from "./Row";
 
-function Board() {
+// delete once I use a non-Key to do this
+interface Board {
+  // handleGuess: Function;
+}
+
+function Board(props: Board) {
   const rows = []
   const blanks = "     "
   for (let i = 0; i < blanks.length; i++) {
@@ -9,6 +14,7 @@ function Board() {
       <Row
         key={i}
         letters={blanks} 
+        // handleGuess={props.handleGuess}
       />
     rows.push(row)
   }

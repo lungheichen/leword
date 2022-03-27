@@ -1,14 +1,23 @@
 import React from 'react';
 
-interface Letter {
-  letter: string;
+interface Key {
+  letter: String;
+  handleGuess?: Function;
 }
 
-function Key(props: Letter) {
+function Key(props: Key) {
   const letter = <b>{props.letter}</b>
 
+  const handleClick = () => {
+    if (props.handleGuess) {
+      props.handleGuess(letter)
+    }
+  }
+
   return (
-    <button className="Key">
+    <button className="Key"
+      onClick={handleClick}
+    >
       {letter}
     </button>
   );

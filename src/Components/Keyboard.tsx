@@ -13,12 +13,15 @@ function Keyboard(props: Keyboard) {
     <div className="Keyboard">
       <Row
         letters="QWERTYUIOP"
+        handleGuess={props.handleGuess}
       />
       <Row
         letters="ASDFGHJKL"
+        handleGuess={props.handleGuess}
       />
       <Row
         letters="ZXCVBNM"
+        handleGuess={props.handleGuess}
       />
     </div>
   );

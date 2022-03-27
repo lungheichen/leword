@@ -14,7 +14,7 @@ function App() {
     setWord('yyyyy')
   }
 
-  const handleGuess = function(word: string) {
+  const handleGuess = (word: string) => {
     setGuess(word)
   }
 
@@ -34,7 +34,10 @@ function App() {
           Learn React
         </a>
       </header>
-      <Board />
+      <Board 
+        // handleGuess={handleGuess}
+      />
+      <p>{guess}</p>
       <Keyboard
         handleGuess={handleGuess}
       />
