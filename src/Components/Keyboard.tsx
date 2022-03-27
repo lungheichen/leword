@@ -1,7 +1,11 @@
 import React from 'react';
 import Row from './Row';
 
-function Keyboard() {
+interface Keyboard {
+  handleGuess: Function;
+}
+
+function Keyboard(props: Keyboard) {
   
   var rows = [];
   var keys = [];

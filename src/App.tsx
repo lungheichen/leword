@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Board from './Components/Board'
 import Keyboard from './Components/Keyboard';
 
 function App() {
+  const [guess, setGuess] = useState("")
+  const [rowNum, setrowNum] = useState(0)  
+  const [word, setWord] = useState("")
+
+  const getWord = () => {
+    // do fetch from server, then set word to response
+    setWord('yyyyy')
+  }
+
+  const handleGuess = function(word: string) {
+    setGuess(word)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -22,7 +35,9 @@ function App() {
         </a>
       </header>
       <Board />
-      <Keyboard />
+      <Keyboard
+        handleGuess={handleGuess}
+      />
     </div>
   );
 }
