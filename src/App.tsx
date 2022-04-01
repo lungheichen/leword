@@ -7,7 +7,6 @@ import Keyboard from './Components/Keyboard';
 
 function App() {
   const [guess, setGuess] = useState("")
-  const [wordGuess, setWordGuess] = useState("")
   const [keyInd, setKeyInd] = useState(0)
   const [rowInd, setRowInd] = useState(0)  
   const [word, setWord] = useState("")
@@ -24,10 +23,20 @@ function App() {
   }
 
   const handleGuess = (word: string) => {
-    console.log(wordGuess)
-    setGuess(word)
-    setWordGuess(wordGuess+word)
-    // handleWordGuess()
+    if (keyInd == 5) {
+      return
+    } else {
+      setGuess(guess+word)
+      setKeyInd(keyInd+1)
+    }
+  }
+
+  const handleSubmit = () => {
+    if (keyInd == 5) {
+      setKeyInd(0)
+      setRowInd(rowInd+1)
+      setGuess("")
+    }
   }
 
   // const handleWordGuess = () => {
@@ -54,10 +63,11 @@ function App() {
       <Board 
         // handleGuess={handleGuess}
       />
-      <p>wordGuess: {wordGuess}</p>
       <p>guess: {guess}</p>
+      <p>keyInd: {keyInd}</p>
       <Keyboard
         handleGuess={handleGuess}
+        handleSubmit={handleSubmit}
       />
     </div>
   );
