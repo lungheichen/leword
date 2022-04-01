@@ -1,3 +1,4 @@
+// import React, { useState, useEffect, useRef } from 'react';
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -6,8 +7,16 @@ import Keyboard from './Components/Keyboard';
 
 function App() {
   const [guess, setGuess] = useState("")
-  const [rowNum, setrowNum] = useState(0)  
+  const [wordGuess, setWordGuess] = useState("")
+  const [keyInd, setKeyInd] = useState(0)
+  const [rowInd, setRowInd] = useState(0)  
   const [word, setWord] = useState("")
+
+  // const prevGuessRef = useRef("");
+  // useEffect(() => {
+  //   prevGuessRef.current = guess;
+  // });
+  // const prevGuess = prevGuessRef.current;
 
   const getWord = () => {
     // do fetch from server, then set word to response
@@ -15,8 +24,16 @@ function App() {
   }
 
   const handleGuess = (word: string) => {
+    console.log(wordGuess)
     setGuess(word)
+    setWordGuess(wordGuess+word)
+    // handleWordGuess()
   }
+
+  // const handleWordGuess = () => {
+  //   var tryout = {text: wordGuess + ""}
+  //   setWordGuess({text: "aaa"})
+  // }
 
   return (
     <div className="App">
@@ -37,7 +54,8 @@ function App() {
       <Board 
         // handleGuess={handleGuess}
       />
-      <p>{guess}</p>
+      <p>wordGuess: {wordGuess}</p>
+      <p>guess: {guess}</p>
       <Keyboard
         handleGuess={handleGuess}
       />

@@ -10,7 +10,7 @@ function Key(props: Key) {
 
   const handleClick = () => {
     if (props.handleGuess) {
-      props.handleGuess(letter)
+      props.handleGuess(props.letter)
     }
   }
 
