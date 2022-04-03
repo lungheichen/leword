@@ -1,5 +1,5 @@
 // import React, { useState, useEffect, useRef } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Board from './Components/Board'
@@ -11,6 +11,15 @@ function App() {
   const [rowInd, setRowInd] = useState(0)  
   const [word, setWord] = useState("")
 
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (word === "") {
+      getWord()
+    }
+    console.log(word)
+  });
+
   // const prevGuessRef = useRef("");
   // useEffect(() => {
   //   prevGuessRef.current = guess;
@@ -19,7 +28,7 @@ function App() {
 
   const getWord = () => {
     // do fetch from server, then set word to response
-    setWord('yyyyy')
+    setWord('YYYYY')
   }
 
   const handleGuess = (word: string) => {
@@ -33,9 +42,14 @@ function App() {
 
   const handleSubmit = () => {
     if (keyInd == 5) {
-      setKeyInd(0)
-      setRowInd(rowInd+1)
-      setGuess("")
+      if (guess===word) {
+        console.log("game won")
+      } else {
+        console.log('reset')
+        setKeyInd(0)
+        setRowInd(rowInd+1)
+        setGuess("")
+      }
     }
   }
 
