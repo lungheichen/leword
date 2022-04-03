@@ -30,7 +30,7 @@ function App() {
     // do fetch from server, then set word to response
     setWord('YYYYY')
   }
-
+  
   const handleGuess = (word: string) => {
     if (keyInd == 5) {
       return
@@ -53,10 +53,10 @@ function App() {
     }
   }
 
-  // const handleWordGuess = () => {
-  //   var tryout = {text: wordGuess + ""}
-  //   setWordGuess({text: "aaa"})
-  // }
+  const handleClear = () => {
+    setGuess("")
+    setKeyInd(0)
+  }
 
   return (
     <div className="App">
@@ -74,14 +74,14 @@ function App() {
           Learn React
         </a>
       </header>
-      <Board 
-        // handleGuess={handleGuess}
-      />
+      <Board />
       <p>guess: {guess}</p>
       <p>keyInd: {keyInd}</p>
+      <p>rowInd: {rowInd}</p>
       <Keyboard
         handleGuess={handleGuess}
         handleSubmit={handleSubmit}
+        handleClear={handleClear}
       />
     </div>
   );

@@ -1,10 +1,12 @@
 import React from 'react';
 import Row from './Row';
 import Enter from './Enter'
+import Clear from './Clear'
 
 interface Keyboard {
   handleGuess: Function;
   handleSubmit: Function;
+  handleClear: Function;
 }
 
 function Keyboard(props: Keyboard) {
@@ -28,6 +30,9 @@ function Keyboard(props: Keyboard) {
       <Enter
         handleSubmit={props.handleSubmit}
       /> 
+      <Clear 
+        handleClear={props.handleClear}
+      />
     </div>
   );
 }
