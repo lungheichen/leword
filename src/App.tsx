@@ -18,7 +18,7 @@ function App() {
       getWord()
     }
     console.log(word)
-  });
+  }, []);
 
   // const prevGuessRef = useRef("");
   // useEffect(() => {
