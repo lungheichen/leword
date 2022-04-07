@@ -12,7 +12,7 @@ function Enter(props: Enter) {
   }
 
   return (
-    <button className="Enter"
+    <button className="SpecialKey"
       onClick={handleClick}
     >
       {enter}

@@ -64,17 +64,8 @@
   flex: 0 0 auto;
 }
 
-.Enter {
-  width: 80px;
-  height: 50px;
-  background-color: #826cd3;
-  font-size: calc(10px + 2vmin);
-
-
-}
-
-.Clear {
-  width: 80px;
+.SpecialKey {
+  width: 75px;
   height: 50px;
   background-color: #826cd3;
   font-size: calc(10px + 2vmin);
@@ -90,7 +81,9 @@
   flex-direction: column;
   align-items: center;
   background-color: #1bcc73;
-  margin: 10px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #1bcc73;
 }
 
 .Row {

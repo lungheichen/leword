@@ -12,7 +12,7 @@ function Clear(props: Clear) {
   }
 
   return (
-    <button className="Clear"
+    <button className="SpecialKey"
       onClick={handleClick}
     >
       {clear}
