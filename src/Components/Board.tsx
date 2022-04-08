@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Row from "./Row";
 
 // delete once I use a non-Key to do this
 interface Board {
   // handleGuess: Function;
   guess: string;
+  guesses: string[];
   rowInd: number;
 }
 
@@ -23,7 +24,7 @@ function Board(props: Board) {
       var row = 
         <Row
           key={i}
-          letters={blanks} 
+          letters={props.guesses[i]} 
           // handleGuess={props.handleGuess}
         />
     }

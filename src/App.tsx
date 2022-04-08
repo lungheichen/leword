@@ -10,7 +10,11 @@ function App() {
   const [keyInd, setKeyInd] = useState(0)
   const [rowInd, setRowInd] = useState(0)  
   const [word, setWord] = useState("")
-
+  const blanks = []
+  for (let i = 0; i < 6; i++) {
+    blanks.push("     ")
+  }
+  const [guesses, setGuesses] = useState(blanks)
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Update the document title using the browser API
@@ -36,6 +40,7 @@ function App() {
       return
     } else {
       setGuess(guess+word)
+      setGuesses(guesses)
       setKeyInd(keyInd+1)
     }
   }
@@ -76,7 +81,8 @@ function App() {
         </a>
       </header>
       <Board
-        guess={guess} 
+        guess={guess}
+        guesses={guesses}
         rowInd={rowInd}
       />
       <p>guess: {guess}</p>
