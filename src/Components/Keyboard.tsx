@@ -7,7 +7,7 @@ import LastRow from './LastRow';
 interface Keyboard {
   handleGuess: Function;
   handleSubmit: Function;
-  handleClear: Function;
+  handleClear: () => void;
 }
 
 function Keyboard(props: Keyboard) {

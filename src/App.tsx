@@ -75,7 +75,10 @@ function App() {
           Learn React
         </a>
       </header>
-      <Board />
+      <Board
+        guess={guess} 
+        rowInd={rowInd}
+      />
       <p>guess: {guess}</p>
       <p>keyInd: {keyInd}</p>
       <p>rowInd: {rowInd}</p>
