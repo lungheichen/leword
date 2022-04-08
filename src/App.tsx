@@ -45,7 +45,7 @@ function App() {
       if (guess===word) {
         console.log("game won")
       } else {
-        console.log('reset')
+        console.log('wrong guess; reset')
         setKeyInd(0)
         setRowInd(rowInd+1)
         setGuess("")
@@ -54,6 +54,7 @@ function App() {
   }
 
   const handleClear = () => {
+    console.log('clear')
     setGuess("")
     setKeyInd(0)
   }

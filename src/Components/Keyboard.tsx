@@ -1,7 +1,8 @@
 import React from 'react';
 import Row from './Row';
-import Enter from './Enter'
-import Clear from './Clear'
+import LastRow from './LastRow';
+// import Enter from './Enter'
+// import Clear from './Clear'
 
 interface Keyboard {
   handleGuess: Function;
@@ -23,16 +24,18 @@ function Keyboard(props: Keyboard) {
         letters="ASDFGHJKL"
         handleGuess={props.handleGuess}
       />
-      <Row
+      <LastRow
         letters="ZXCVBNM"
         handleGuess={props.handleGuess}
+        handleSubmit={props.handleSubmit}
+        handleClear={props.handleClear}
       />
-      <Enter
+      {/* <Enter
         handleSubmit={props.handleSubmit}
       /> 
       <Clear 
         handleClear={props.handleClear}
-      />
+      /> */}
     </div>
   );
 }
