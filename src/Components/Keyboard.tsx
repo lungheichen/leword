@@ -5,8 +5,8 @@ import LastRow from './LastRow';
 // import Clear from './Clear'
 
 interface Keyboard {
-  handleGuess: Function;
-  handleSubmit: Function;
+  handleGuess: (word: string) => void;
+  handleSubmit: () => void;
   handleClear: () => void;
 }
 

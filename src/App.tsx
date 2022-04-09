@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import './App.css';
 import Board from './Components/Board'
 import Keyboard from './Components/Keyboard';
+import { isConstructorDeclaration } from 'typescript';
 
 function App() {
   const [guess, setGuess] = useState("")
@@ -36,19 +37,22 @@ function App() {
   }
   
   const handleGuess = (word: string) => {
-    if (keyInd == 5) {
+    if (keyInd >= 5) {
+      // Do nothing; cannot exceed 5 letters
       return
     } else {
       setGuess(guess+word)
-      setGuesses(guesses)
       setKeyInd(keyInd+1)
     }
   }
 
   const handleSubmit = () => {
-    if (keyInd == 5) {
-      if (guess===word) {
+    if (keyInd === 5) {
+      if (guess === word) {
         console.log("game won")
+      } else if (rowInd === 5) {
+        console.log("GAME OVER")
+        return
       } else {
         console.log('wrong guess; reset')
         const temp = guesses
