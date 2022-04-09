@@ -1,15 +1,14 @@
 // import React, { useState, useEffect, useRef } from 'react';
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Board from './Components/Board'
 import Keyboard from './Components/Keyboard';
-import { isConstructorDeclaration } from 'typescript';
 
 function App() {
+  const [logger, setLogger] = useState("logger spot")
   const [guess, setGuess] = useState("")
   const [keyInd, setKeyInd] = useState(0)
-  const [rowInd, setRowInd] = useState(0)  
+  const [rowInd, setRowInd] = useState(0)
   const [word, setWord] = useState("")
   const blanks = []
   for (let i = 0; i < 6; i++) {
@@ -39,6 +38,7 @@ function App() {
   const handleGuess = (word: string) => {
     if (keyInd >= 5) {
       // Do nothing; cannot exceed 5 letters
+      setLogger("You've maxed out on guesses; either clear or submit guess")
       return
     } else {
       setGuess(guess+word)
@@ -49,7 +49,8 @@ function App() {
   const handleSubmit = () => {
     if (keyInd === 5) {
       if (guess === word) {
-        console.log("game won")
+        setLogger("You win!")
+        console.log("correct guess")
       } else if (rowInd === 5) {
         console.log("GAME OVER")
         return
@@ -74,27 +75,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Le Word
       </header>
       <Board
         guess={guess}
         guesses={guesses}
         rowInd={rowInd}
       />
-      <p>guess: {guess}</p>
-      <p>keyInd: {keyInd}</p>
-      <p>rowInd: {rowInd}</p>
+      <div className="Debug">
+        <p>{logger}</p>
+        <p>keyInd: {keyInd}</p>
+        <p>rowInd: {rowInd}</p>
+      </div>
       <Keyboard
         handleGuess={handleGuess}
         handleSubmit={handleSubmit}

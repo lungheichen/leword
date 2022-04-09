@@ -3,10 +3,9 @@
   text-align: center;
   flex-direction: column;
   align-items: center;
-
-
 }
 
+/* not used any longer */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -20,7 +19,7 @@
 
 .App-header {
   background-color: #d3826c;
-  min-height: 100vh;
+  min-height: 1vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -93,4 +92,8 @@
   margin: auto;
   float: left;
   gap: 5px;
+}
+
+.Debug {
+  background-color: #738b7f;
 }
