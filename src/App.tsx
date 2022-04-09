@@ -51,6 +51,9 @@ function App() {
         console.log("game won")
       } else {
         console.log('wrong guess; reset')
+        const temp = guesses
+        temp[rowInd] = guess
+        setGuesses(temp)
         setKeyInd(0)
         setRowInd(rowInd+1)
         setGuess("")
