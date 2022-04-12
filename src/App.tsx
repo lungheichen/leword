@@ -1,8 +1,8 @@
-// import React, { useState, useEffect, useRef } from 'react';
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Board from './Components/Board'
+import Board from './Components/Board';
 import Keyboard from './Components/Keyboard';
+import guessCheck from './Helpers/guessCheck';
 
 function App() {
   const [logger, setLogger] = useState("logger spot")
@@ -32,13 +32,15 @@ function App() {
 
   const getWord = () => {
     // do fetch from server, then set word to response
-    setWord('YYYYY')
+    // later... this will check the word on each submit
+    // setword will no longer be needed
+    setWord('APPLE')
   }
   
   const handleGuess = (word: string) => {
     if (keyInd >= 5) {
       // Do nothing; cannot exceed 5 letters
-      setLogger("You've maxed out on guesses; either clear or submit guess")
+      console.log("You've maxed out on guesses; either clear or submit guess")
       return
     } else {
       setGuess(guess+word)
@@ -55,6 +57,7 @@ function App() {
         console.log("GAME OVER")
         return
       } else {
+        // include additional logic to color letters
         console.log('wrong guess; reset')
         const temp = guesses
         temp[rowInd] = guess
@@ -84,6 +87,7 @@ function App() {
       />
       <div className="Debug">
         <p>{logger}</p>
+        <p>{guessCheck(word, guess)}</p>
         <p>keyInd: {keyInd}</p>
         <p>rowInd: {rowInd}</p>
       </div>
