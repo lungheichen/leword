@@ -37,13 +37,13 @@ function App() {
     setWord('APPLE')
   }
   
-  const handleGuess = (word: string) => {
+  const handleGuess = (letter: string) => {
     if (keyInd >= 5) {
       // Do nothing; cannot exceed 5 letters
       console.log("You've maxed out on guesses; either clear or submit guess")
       return
     } else {
-      setGuess(guess+word)
+      setGuess(guess+letter)
       setKeyInd(keyInd+1)
     }
   }
@@ -51,6 +51,7 @@ function App() {
   const handleSubmit = () => {
     if (keyInd === 5) {
       if (guess === word) {
+        // set all letters to green
         setLogger("You win!")
         console.log("correct guess")
       } else if (rowInd === 5) {
@@ -75,8 +76,19 @@ function App() {
     setKeyInd(0)
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    // need to figure out how to allow typing as long as user has clicked on website
+    const letter = event.key
+    if (letter === "Backspace" && keyInd > 0) {
+      setGuess(guess.slice(0, keyInd-1))
+      setKeyInd(keyInd-1)
+    } else if (letter.length === 1 && letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 122) {
+      handleGuess(letter.toUpperCase())
+    }
+  }
+
   return (
-    <div className="App">
+    <div className="App" onKeyDown={handleKeyDown}>
       <header className="App-header">
         Le Word
       </header>
