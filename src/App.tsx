@@ -22,6 +22,7 @@ function App() {
       getWord()
     }
     console.log(word)
+
   }, []);
 
   // const prevGuessRef = useRef("");
@@ -75,20 +76,30 @@ function App() {
     setGuess("")
     setKeyInd(0)
   }
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  
+  const handleKeyDown = (event: KeyboardEvent) => {
     // need to figure out how to allow typing as long as user has clicked on website
     const letter = event.key
+    console.log(letter)
     if (letter === "Backspace" && keyInd > 0) {
       setGuess(guess.slice(0, keyInd-1))
       setKeyInd(keyInd-1)
+    } else if (letter === "Enter") {
+      handleSubmit()
     } else if (letter.length === 1 && letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 122) {
       handleGuess(letter.toUpperCase())
     }
   }
 
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown])
+
   return (
-    <div className="App" onKeyDown={handleKeyDown}>
+    <div className="App">
       <header className="App-header">
         Le Word
       </header>
