@@ -6,10 +6,13 @@
     "extends": [
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
-        "airbnb"
+        "airbnb-typescript",
+        "prettier",
+        "plugin:import/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
+        "project": "./tsconfig.json",
         "ecmaFeatures": {
             "jsx": true
         },
@@ -18,18 +21,10 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "prettier"
     ],
     "rules": {
-        "import/extensions": [
-            "error",
-            "ignorePackages",
-            {
-              "js": "never",
-              "jsx": "never",
-              "ts": "never",
-              "tsx": "never"
-            }
-        ]
+        "operator-linebreak": ["error", "after"]
     }
 }
