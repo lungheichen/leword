@@ -3,6 +3,7 @@ import './App.css';
 import Board from './Components/Board';
 import Keyboard from './Components/Keyboard';
 import guessCheck from './Helpers/guessCheck';
+import { flushSync } from 'react-dom';
 
 function App() {
   const [logger, setLogger] = useState("logger spot")
@@ -25,12 +26,6 @@ function App() {
 
   }, []);
 
-  // const prevGuessRef = useRef("");
-  // useEffect(() => {
-  //   prevGuessRef.current = guess;
-  // });
-  // const prevGuess = prevGuessRef.current;
-
   const getWord = () => {
     // do fetch from server, then set word to response
     // later... this will check the word on each submit
@@ -46,6 +41,7 @@ function App() {
     } else {
       setGuess(guess+letter)
       setKeyInd(keyInd+1)
+      console.log(keyInd)
     }
   }
 
@@ -78,27 +74,34 @@ function App() {
   }
   
   const handleKeyDown = (event: KeyboardEvent) => {
-    // need to figure out how to allow typing as long as user has clicked on website
-    const letter = event.key
-    console.log(letter)
-    if (letter === "Backspace" && keyInd > 0) {
-      setGuess(guess.slice(0, keyInd-1))
-      setKeyInd(keyInd-1)
-    } else if (letter === "Enter") {
-      handleSubmit()
-    } else if (letter.length === 1 && letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 122) {
-      handleGuess(letter.toUpperCase())
+    // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      // need to figure out how to allow typing as long as user has clicked on website
+      const letter = event.key
+      console.log(letter)
+      if (letter === "Backspace" && keyInd > 0) {
+        setGuess(guess.slice(0, keyInd-1))
+        setKeyInd(keyInd-1)
+      } else if (letter === "Enter") {
+        event.preventDefault()
+        handleSubmit()
+      } else if (letter.length === 1 && letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 122) {
+        // flush sync forces synchonous events...
+        // may need to do something else...
+        flushSync(() => {
+          handleGuess(letter.toUpperCase())
+        })
+      }
     }
-  }
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown])
 
   return (
+    // <div className="App" onKeyDown={handleKeyDown}>
     <div className="App">
       <header className="App-header">
         Le Word
