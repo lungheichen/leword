@@ -3,7 +3,7 @@ import React from 'react';
 interface Key {
   letter: string;
   handleGuess?: Function;
-  color?: string
+  color?: string;  // In the future, make this a required value?
 }
 
 function Key(props: Key) {
@@ -12,18 +12,18 @@ function Key(props: Key) {
   if (props.color) {
     color = props.color
   } else {
-    color = 'g'
+    color = ' '
   }
   
-  const colors: {[key: string]: string} = {
-    original: '#826cd3',
+  const colorChoices: {[key: string]: string} = {
+    ' ': '#826cd3',
     n: 'gray',
     y: 'yellow',
     g: 'green'
   }
 
   const style: React.CSSProperties = {
-    backgroundColor: colors[color],
+    backgroundColor: colorChoices[color],
   }
 
   const handleClick = () => {

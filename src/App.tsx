@@ -7,15 +7,22 @@ import guessCheck from './Helpers/guessCheck';
 
 function App() {
   const [logger, setLogger] = useState('logger spot');
-  const [guess, setGuess] = useState('');
+  const [guess, setGuess] = useState('');  // Could be renamed currentGuess
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
   const [word, setWord] = useState('');
-  const blanks = [];
+  const blankLetters = [];
   for (let i = 0; i < 6; i += 1) {
-    blanks.push('     ');
+    blankLetters.push('     ');
   }
-  const [guesses, setGuesses] = useState(blanks);
+  // All 6 guesses representing the 6 rows on the board
+  // Probably should convert to using array of arrays for guesses in order to deal with sync issues
+  const [guesses, setGuesses] = useState(blankLetters);
+  const blankColors = [];
+  for (let i = 0; i < 6; i += 1) {
+    blankColors.push([' ', ' ', ' ', ' ', ' ', ' ']);
+  }
+  const [boardColors, setBoardColors] = useState(blankColors);
 
   const getWord = () => {
     // do fetch from server, then set word to response
@@ -48,16 +55,23 @@ function App() {
     if (keyInd === 5) {
       if (guess === word) {
         // set all letters to green
+        const colorsTemp = boardColors;
+        colorsTemp[rowInd] = guessCheck(word, guess);
+        setBoardColors(colorsTemp);
         setLogger('You win!');
         console.log('correct guess');
       } else if (rowInd === 5) {
         console.log('GAME OVER');
       } else {
-        // include additional logic to color letters
         console.log('wrong guess; reset');
+        // Set in the current guess to the current row
         const temp = guesses;
         temp[rowInd] = guess;
         setGuesses(temp);
+        // include additional logic to color letters
+        const colorsTemp = boardColors;
+        colorsTemp[rowInd] = guessCheck(word, guess);
+        setBoardColors(colorsTemp);
         setKeyInd(0);
         setRowInd(rowInd + 1);
         setGuess('');
@@ -106,7 +120,7 @@ function App() {
     // <div className="App" onKeyDown={handleKeyDown}>
     <div className="App">
       <header className="App-header">Le Word</header>
-      <Board guess={guess} guesses={guesses} rowInd={rowInd} />
+      <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
       <div className="Debug">
         <p>{logger}</p>
         <p>{guessCheck(word, guess)}</p>
