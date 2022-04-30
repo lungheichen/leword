@@ -1,8 +1,6 @@
 import React from 'react';
 import Row from './Row';
 import LastRow from './LastRow';
-// import Enter from './Enter'
-// import Clear from './Clear'
 
 interface Keyboard {
   handleGuess: (word: string) => void;
@@ -11,31 +9,25 @@ interface Keyboard {
 }
 
 function Keyboard(props: Keyboard) {
-  
-  var rows = [];
-  var keys = [];
+  // I'll be taking props.keyboardColors (to be implemented later) that will be a dictionary to build an array of colors by for-looping through the letters.
+  const firstRowLetters = 'QWERTYUIOP';
+  const firstRowColors = [];
+  for (let i = 0; i < firstRowLetters.length; i += 1) {
+    continue;
+  }
+  const secondRowLetters = 'ASDFGHJKL';
+  const lastRowLetters = 'ZXCVBNM';
+
   return (
     <div className="Keyboard">
-      <Row
-        letters="QWERTYUIOP"
-        handleGuess={props.handleGuess}
-      />
-      <Row
-        letters="ASDFGHJKL"
-        handleGuess={props.handleGuess}
-      />
+      <Row letters={firstRowLetters} handleGuess={props.handleGuess} />
+      <Row letters={secondRowLetters} handleGuess={props.handleGuess} />
       <LastRow
-        letters="ZXCVBNM"
+        letters={lastRowLetters}
         handleGuess={props.handleGuess}
         handleSubmit={props.handleSubmit}
         handleClear={props.handleClear}
       />
-      {/* <Enter
-        handleSubmit={props.handleSubmit}
-      /> 
-      <Clear 
-        handleClear={props.handleClear}
-      /> */}
     </div>
   );
 }

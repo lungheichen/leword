@@ -23,6 +23,11 @@ function App() {
     blankColors.push([' ', ' ', ' ', ' ', ' ', ' ']);
   }
   const [boardColors, setBoardColors] = useState(blankColors);
+  const blankColorDict: {[letter: string]: string} = {}
+  for (let c = 65; c <= 90; c += 1) {
+    blankColorDict[String.fromCharCode(c)] = ' '
+  }
+  const [keyBoardColors, setKeyboardColors] = useState(blankColorDict)
 
   const getWord = () => {
     // do fetch from server, then set word to response
@@ -53,25 +58,24 @@ function App() {
 
   const handleSubmit = () => {
     if (keyInd === 5) {
+      // Set in the current guess to the current row
+      const temp = guesses;
+      temp[rowInd] = guess;
+      setGuesses(temp);
+      // include additional logic to color letters
+      const colorsTemp = boardColors;
+      colorsTemp[rowInd] = guessCheck(word, guess);
+      
+      setBoardColors(colorsTemp);
+      // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
+      // setKeyboardColors(colorsTemp)
       if (guess === word) {
-        // set all letters to green
-        const colorsTemp = boardColors;
-        colorsTemp[rowInd] = guessCheck(word, guess);
-        setBoardColors(colorsTemp);
         setLogger('You win!');
         console.log('correct guess');
       } else if (rowInd === 5) {
         console.log('GAME OVER');
       } else {
         console.log('wrong guess; reset');
-        // Set in the current guess to the current row
-        const temp = guesses;
-        temp[rowInd] = guess;
-        setGuesses(temp);
-        // include additional logic to color letters
-        const colorsTemp = boardColors;
-        colorsTemp[rowInd] = guessCheck(word, guess);
-        setBoardColors(colorsTemp);
         setKeyInd(0);
         setRowInd(rowInd + 1);
         setGuess('');
@@ -85,36 +89,37 @@ function App() {
     setKeyInd(0);
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // need to figure out how to allow typing as long as user has clicked on website
-    const letter = event.key;
-    console.log(letter);
-    if (letter === 'Backspace' && keyInd > 0) {
-      setGuess(guess.slice(0, keyInd - 1));
-      setKeyInd(keyInd - 1);
-    } else if (letter === 'Enter') {
-      event.preventDefault();
-      handleSubmit();
-    } else if (
-      letter.length === 1 &&
-      ((letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 90) ||
-        (letter.charCodeAt(0) >= 97 && letter.charCodeAt(0) <= 122))
-    ) {
-      // flush sync forces synchonous events...
-      // may need to do something else...
-      flushSync(() => {
-        handleGuess(letter.toUpperCase());
-      });
-    }
-  };
-
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      // need to figure out how to allow typing as long as user has clicked on website
+      const letter = event.key;
+      console.log(letter);
+      if (letter === 'Backspace' && keyInd > 0) {
+        setGuess(guess.slice(0, keyInd - 1));
+        setKeyInd(keyInd - 1);
+      } else if (letter === 'Enter') {
+        event.preventDefault();
+        handleSubmit();
+      } else if (
+        letter.length === 1 &&
+        ((letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 90) ||
+          (letter.charCodeAt(0) >= 97 && letter.charCodeAt(0) <= 122))
+      ) {
+        // flush sync forces synchonous events...
+        // may need to do something else...
+        flushSync(() => {
+          handleGuess(letter.toUpperCase());
+        });
+      }
+    };
+  
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleKeyDown]);
+  }, [guess, keyInd, rowInd, guesses, boardColors]);
+  // }, [handleKeyDown]);  // needs handleKeyDown function to be outside of useEffect
 
   return (
     // <div className="App" onKeyDown={handleKeyDown}>

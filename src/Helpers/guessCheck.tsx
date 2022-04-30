@@ -1,8 +1,11 @@
 /* 
 guessCheck will take in the answer and guess and output the colors to color the guess boxes.  Colors are represented by 'g' for Green, 'y' for Yellow, and 'n' for No-color. 
+
+I think this is a fitting place to include a dictionaryChecker helper function
 */
 
 const guessCheck = (answer: string, guess: string) => {
+  // dictionaryChecker should go here before even checking the guess
   // get dict of letter count in answer
   const answerLetters: {[letter: string]: number} = {}
   for (let i = 0; i < answer.length; i++) {
