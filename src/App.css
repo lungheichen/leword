@@ -3,6 +3,7 @@
   text-align: center;
   flex-direction: column;
   align-items: center;
+  background-color: #1bcc73;
 }
 
 /* not used any longer */
@@ -18,7 +19,7 @@
 }
 
 .App-header {
-  background-color: #d3826c;
+  /* background-color: #d3826c; */
   min-height: 1vh;
   display: flex;
   flex-direction: column;

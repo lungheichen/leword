@@ -127,12 +127,12 @@ function App() {
     <div className="App">
       <header className="App-header">Le Word</header>
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
-      <div className="Debug">
+      {/* <div className="Debug">
         <p>{logger}</p>
         <p>{guessCheck(word, guess)}</p>
         <p>keyInd: {keyInd}</p>
         <p>rowInd: {rowInd}</p>
-      </div>
+      </div> */}
       <Keyboard handleGuess={handleGuess} handleSubmit={handleSubmit} handleClear={handleClear} keyboardColors={keyboardColors} />
     </div>
   );
