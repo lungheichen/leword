@@ -4,7 +4,7 @@ import Key from './Key';
 interface Row {
   letters: string;
   handleGuess?: (word: string) => void;
-  colors?: string[];
+  colors: string[];
 }
 
 function Row(props: Row) {
@@ -12,12 +12,9 @@ function Row(props: Row) {
   for (let i = 0; i < props.letters.length; i++) {
     if (props.handleGuess) {
       // keys for keyboard (with handleGuess aka handleKeystroke) 
-      var key = <Key handleGuess={props.handleGuess} key={i} letter={props.letters[i]} />;
-    } else if (props.colors) {
-      var key = <Key key={i} letter={props.letters[i]} color={props.colors[i]} />;
+      var key = <Key handleGuess={props.handleGuess} key={i} letter={props.letters[i]} color={props.colors[i]} />;
     } else {
-      // This will never run... I'm just being lazy
-      var key = <Key key={i} letter={props.letters[i]} />;
+      var key = <Key key={i} letter={props.letters[i]} color={props.colors[i]} />;
     }
     letters.push(key);
   }

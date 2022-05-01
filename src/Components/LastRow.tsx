@@ -4,10 +4,11 @@ import Enter from './Enter'
 import Clear from './Clear'
 
 interface LastRow {
-  letters: String;
-  handleGuess: Function;
+  letters: string;
+  handleGuess: (word: string) => void;
   handleSubmit: Function;
   handleClear: Function;
+  colors: string[];
 }
 
 function LastRow(props: LastRow) {
@@ -19,6 +20,7 @@ function LastRow(props: LastRow) {
         handleGuess={props.handleGuess}
         key={i}
         letter={props.letters[i]}
+        color={props.colors[i]} 
       />
     letters.push(key);
   }

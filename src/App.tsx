@@ -70,7 +70,6 @@ function App() {
       setBoardColors(colorsTemp);
       // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
       setKeyboardColors(getKeyboardColors(keyboardColors, guess, colorsTemp[rowInd]));
-      console.log(keyboardColors)
       if (guess === word) {
         setLogger('You win!');
         console.log('correct guess');
@@ -134,7 +133,7 @@ function App() {
         <p>keyInd: {keyInd}</p>
         <p>rowInd: {rowInd}</p>
       </div>
-      <Keyboard handleGuess={handleGuess} handleSubmit={handleSubmit} handleClear={handleClear} />
+      <Keyboard handleGuess={handleGuess} handleSubmit={handleSubmit} handleClear={handleClear} keyboardColors={keyboardColors} />
     </div>
   );
 }
