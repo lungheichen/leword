@@ -4,10 +4,11 @@ import './App.css';
 import Board from './Components/Board';
 import Keyboard from './Components/Keyboard';
 import guessCheck from './Helpers/guessCheck';
+import getKeyboardColors from './Helpers/getKeyboardColors';
 
 function App() {
   const [logger, setLogger] = useState('logger spot');
-  const [guess, setGuess] = useState('');  // Could be renamed currentGuess
+  const [guess, setGuess] = useState(''); // Could be renamed currentGuess
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
   const [word, setWord] = useState('');
@@ -23,11 +24,11 @@ function App() {
     blankColors.push([' ', ' ', ' ', ' ', ' ', ' ']);
   }
   const [boardColors, setBoardColors] = useState(blankColors);
-  const blankColorDict: {[letter: string]: string} = {}
+  const blankColorDict: { [letter: string]: string } = {};
   for (let c = 65; c <= 90; c += 1) {
-    blankColorDict[String.fromCharCode(c)] = ' '
+    blankColorDict[String.fromCharCode(c)] = ' ';
   }
-  const [keyBoardColors, setKeyboardColors] = useState(blankColorDict)
+  const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
   const getWord = () => {
     // do fetch from server, then set word to response
@@ -65,10 +66,11 @@ function App() {
       // include additional logic to color letters
       const colorsTemp = boardColors;
       colorsTemp[rowInd] = guessCheck(word, guess);
-      
+
       setBoardColors(colorsTemp);
       // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
-      // setKeyboardColors(colorsTemp)
+      setKeyboardColors(getKeyboardColors(keyboardColors, guess, colorsTemp[rowInd]));
+      console.log(keyboardColors)
       if (guess === word) {
         setLogger('You win!');
         console.log('correct guess');
@@ -113,7 +115,7 @@ function App() {
         });
       }
     };
-  
+
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
