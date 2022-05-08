@@ -5,6 +5,10 @@ import Board from './Components/Board';
 import Keyboard from './Components/Keyboard';
 import guessCheck from './Helpers/guessCheck';
 import getKeyboardColors from './Helpers/getKeyboardColors';
+import dictWords from './Assets/dict';
+
+// console.log(fs);
+
 
 function App() {
   const [logger, setLogger] = useState('logger spot');
@@ -12,6 +16,13 @@ function App() {
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
   const [word, setWord] = useState('');
+  const dictSet = new Set(dictWords)
+  // fetch('./Assets/dict.txt')
+  //   .then((r) => r.text())
+  //   .then(text  => {
+  //     console.log(text[1]);
+  // })  
+
   const blankLetters = [];
   for (let i = 0; i < 6; i += 1) {
     blankLetters.push('     ');
@@ -58,7 +69,13 @@ function App() {
   };
 
   const handleSubmit = () => {
+    console.log(guess.toLowerCase())
     if (keyInd === 5) {
+      // check if word is in dictSet first
+      if (!(dictSet.has(guess.toLowerCase()))) {
+        console.log('word not in dictionary; try again')
+        return
+      }
       // Set in the current guess to the current row
       const temp = guesses;
       temp[rowInd] = guess;
