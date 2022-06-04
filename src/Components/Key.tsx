@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface Key {
+interface IKey {
   letter: string;
   handleGuess?: Function;
   color?: string;  // In the future, make this a required value?
 }
 
-function Key(props: Key) {
+function Key(props: IKey) {
   const letter = <b>{props.letter}</b>
   let color: string;
   if (props.color) {

@@ -3,7 +3,7 @@ import Key from "./Key";
 import Enter from './Enter'
 import Clear from './Clear'
 
-interface LastRow {
+interface ILastRow {
   letters: string;
   handleGuess: (word: string) => void;
   handleSubmit: Function;
@@ -11,7 +11,7 @@ interface LastRow {
   colors: string[];
 }
 
-function LastRow(props: LastRow) {
+function LastRow(props: ILastRow) {
 
   const letters = []
   for (let i = 0; i < props.letters.length; i++) {

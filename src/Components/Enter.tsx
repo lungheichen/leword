@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface Enter {
+interface IEnter {
   handleSubmit: Function;
 }
 
-function Enter(props: Enter) {
+function Enter(props: IEnter) {
   const enter = "Enter"
 
   const handleClick = () => {

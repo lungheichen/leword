@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface Clear {
+interface IClear {
   handleClear: Function;
 }
 
-function Clear(props: Clear) {
+function Clear(props: IClear) {
   const clear = "Clear"
 
   const handleClick = () => {

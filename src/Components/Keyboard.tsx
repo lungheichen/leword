@@ -2,14 +2,14 @@ import React from 'react';
 import Row from './Row';
 import LastRow from './LastRow';
 
-interface Keyboard {
+interface IKeyboard {
   handleGuess: (word: string) => void;
   handleSubmit: () => void;
   handleClear: () => void;
   keyboardColors: {[letter: string]: string}
 }
 
-function Keyboard(props: Keyboard) {
+function Keyboard(props: IKeyboard) {
   // I'll be taking props.keyboardColors (to be implemented later) that will be a dictionary to build an array of colors by for-looping through the letters.
   const rowLetters = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
   const rowColors: string[][] = [];

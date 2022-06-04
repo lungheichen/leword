@@ -11,7 +11,7 @@ import dictWords from './Assets/dict';
 
 
 function App() {
-  const [logger, setLogger] = useState('logger spot');
+  // const [logger, setLogger] = useState('logger spot');
   const [guess, setGuess] = useState(''); // Could be renamed currentGuess
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
@@ -88,7 +88,7 @@ function App() {
       // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
       setKeyboardColors(getKeyboardColors(keyboardColors, guess, colorsTemp[rowInd]));
       if (guess === word) {
-        setLogger('You win!');
+        // setLogger('You win!');
         console.log('correct guess');
       } else if (rowInd === 5) {
         console.log('GAME OVER');

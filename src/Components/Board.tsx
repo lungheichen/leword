@@ -2,7 +2,7 @@ import React from 'react';
 import Row from './Row';
 
 // delete once I use a non-Key to do this
-interface Board {
+interface IBoard {
   // handleGuess: Function;
   guess: string;
   guesses: string[];
@@ -10,12 +10,12 @@ interface Board {
   rowInd: number;
 }
 
-function Board(props: Board) {
+function Board(props: IBoard) {
   const rows = [];
-  const blanks = '     ';
   for (let i = 0; i < 6; i++) {
+    let row;
     if (i === props.rowInd) {
-      var row = (
+      row = (
         <Row
           key={i}
           letters={props.guess.padEnd(5, ' ')}
@@ -24,7 +24,7 @@ function Board(props: Board) {
         />
       );
     } else {
-      var row = (
+      row = (
         <Row
           key={i}
           letters={props.guesses[i]}
