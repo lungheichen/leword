@@ -90,8 +90,12 @@ function App() {
       if (guess === word) {
         // setLogger('You win!');
         console.log('correct guess');
+        // lazy fix; I should be able to just disable key logging
+        setRowInd(6);
       } else if (rowInd === 5) {
         console.log('GAME OVER');
+        // lazy fix; I should be able to just disable key logging
+        setRowInd(rowInd + 1);
       } else {
         console.log('wrong guess; reset');
         setKeyInd(0);

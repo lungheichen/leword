@@ -1,8 +1,8 @@
-# Getting Started with Create React App
+# Le Word
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A copycat version of Wordle using React Hooks.
 
-## Available Scripts
+## How to run
 
 In the project directory, you can run:
 
