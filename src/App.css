@@ -1,3 +1,8 @@
+:root {
+  --key-border-color: white;
+  --key-background-color: #ED2939;
+}
+
 .App {
   display: flex;
   text-align: center;
@@ -51,7 +56,7 @@
   gap: 5px;
 
 }
-
+/*  */
 .Key {
   display: flex;
   justify-content: center;
@@ -59,8 +64,10 @@
   float: left;
   width: calc(8vmin);
   height: calc(8vmin);
-  /* background-color: #826cd3; */
-  border: 1vmin solid #bdd36c;
+  /* What I wanted */
+  /* border: 1vmin solid #bdd36c; */
+  /* More French-colored */
+  border: 1vmin solid var(--key-border-color);
   font-size: calc(10px + 2vmin);
   /* flex: 0 0 auto; */
 }
@@ -71,9 +78,9 @@
   align-items: center;
   width: calc(15vmin);
   height: calc(8vmin);
-  background-color: #826cd3;
+  background-color: var(--key-background-color);
   font-size: calc(10px + 2vmin);
-  border: 1vmin solid #bdd36c;
+  border: 1vmin solid var(--key-border-color);
 }
 
 .Board {
@@ -84,7 +91,8 @@
   align-items: center;
   border-style: solid;
   border-width: 10px;
-  border-color: #1bcc73;
+  /* border-color: #1bcc73; */
+  border-color: transparent;
 }
 
 .Row {

@@ -16,9 +16,10 @@ function Key(props: IKey) {
   }
   
   const colorChoices: {[key: string]: string} = {
-    ' ': '#826cd3',
+    // ' ': '#826cd3', // What I originally wanted
+    ' ': '#ED2939', // More French-colored
     n: 'gray',
-    y: 'yellow',
+    y: '#FFD700',
     g: 'green'
   }
 

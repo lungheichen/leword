@@ -32,6 +32,7 @@ const guessCheck = (answer: string, guess: string) => {
     // then evaluate for Yellow or No-color
     if (colors[i] === '') {
       if (answerLetters[guess[i]] > 0) {
+        // Need to check if more than one letter exists in answer
         colors[i] = 'y'
         answerLetters[guess[i]]--
       } else {
