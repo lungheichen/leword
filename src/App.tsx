@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import './App.css';
 import Board from './Components/Board';
 import Keyboard from './Components/Keyboard';
+import Header from './Components/Header';
 import guessCheck from './Helpers/guessCheck';
 import getKeyboardColors from './Helpers/getKeyboardColors';
 import dictWords from './Assets/dict';
@@ -111,6 +112,23 @@ function App() {
     setKeyInd(0);
   };
 
+  // const handleLogin = () => {
+  //   fetch('/user', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ username, password }),
+  //     headers: {'Content-Type': 'application/json'},
+  //   })
+  //   .then(res => {
+  //     if(res.status === 200) {
+  //       dispatch(createMarket(marketId, location));
+  //     } else {
+  //       console.log('in createMarketThunk - Server returned status', res.status)
+  //     }
+  //   })  
+  //   .catch(err => console.log('Error in createMarketThunk fetch:', err));
+    
+  // }
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,7 +164,7 @@ function App() {
   return (
     // <div className="App" onKeyDown={handleKeyDown}>
     <div className="App">
-      <header className="App-header">Le Word</header>
+      <Header/>
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
       {/* <div className="Debug">
         <p>{logger}</p>
