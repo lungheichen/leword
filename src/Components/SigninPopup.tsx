@@ -17,14 +17,7 @@ function SigninPopup() {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
   const [password, setPassword] = useState("");
-
-  // Fix this
-  const handleSubmit = () => {
-    // Simple GET request using fetch
-    fetch('https://api.npms.io/v2/search?q=react')
-        .then(response => response.json())
-        .then(data => ({ totalReactPackages: data.password }));
-  };
+  const server = process.env.REACT_APP_SERVER;
 
   return (
     <div>
@@ -36,10 +29,10 @@ function SigninPopup() {
           <a className="close" onClick={closeModal}>
             &times;
           </a>
-          <form method='POST' action='/user' onSubmit={handleSubmit}>
+          <form method='POST' action={server+'/user'}>
             <div>
-              <label htmlFor="username">Username: </label>
-              <input type="text" id="username" name="username" size={10} />
+              <label htmlFor="name">Username: </label>
+              <input type="text" id="name" name="name" size={10} />
             </div>
             <div>
               <label htmlFor="password">Password: </label>
