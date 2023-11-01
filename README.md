@@ -2,7 +2,31 @@
 
 A copycat version of Wordle using React Hooks.
 
-## How to run
+## How to run all in development
+
+In the project directory, you can run:
+
+### `npm run dev`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The backend is served at [http://localhost:8080](http://localhost:8080)
+
+A .env file should contain the following:
+
+```
+PORT=3000
+SRV_HOST=localhost
+SRV_PORT=8080
+REACT_APP_SERVER=http://$SRV_HOST:$SRV_PORT
+DB_USER=[username; I used MongoDB]
+DB_PASS=[password for DB_USER]
+DB_NAME=leword
+NODE_ENV=development
+```
+
+## How to run the React App
 
 In the project directory, you can run:
 
