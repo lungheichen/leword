@@ -19,6 +19,8 @@ function SigninPopup() {
   const [password, setPassword] = useState("");
   const server = process.env.REACT_APP_SERVER;
 
+  // Need to reintroduce the handleSubmit so that it receives the data back
+
   return (
     <div>
       <button type="button" className="button" onClick={() => setOpen(o => !o)}>
