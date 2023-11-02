@@ -2,9 +2,16 @@
 
 A copycat version of Wordle using React Hooks.
 
+## Installation
+
+Install the project by running the following:
+
+npm install
+
 ## How to run all in development
 
-In the project directory, you can run:
+In the project directory, you can run the following to run the front and backend
+in development:
 
 ### `npm run dev`
 
