@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Popup from 'reactjs-popup';
+import { Popup } from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
 // interface ISigninPopup {
@@ -34,11 +34,22 @@ function SigninPopup() {
           <form method='POST' action={server+'/user'}>
             <div>
               <label htmlFor="name">Username: </label>
-              <input type="text" id="name" name="name" size={10} />
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                size={10} 
+                onKeyDown={e => e.stopPropagation()}/>
             </div>
             <div>
               <label htmlFor="password">Password: </label>
-              <input type="password" id="password" name="password" value={password} onChange={e => setPassword(e.target.value)} />
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                value={password} 
+                onKeyDown={e => e.stopPropagation()} 
+                onChange={e => setPassword(e.target.value)} />
             </div>
             <button type="submit">Submit form</button>
           </form>
