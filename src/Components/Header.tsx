@@ -6,8 +6,8 @@ function Header() {
 
   return (
     <header className="App-header">
-      <div>left</div>
-      <div>Le Word</div>
+      <div className="App-header-div">left</div>
+      <div className="App-header-div">Le Word</div>
       <RightHeader/>
     </header>
   );
