@@ -23,10 +23,10 @@ function SigninPopup() {
 
   return (
     <div>
-      <button type="button" className="button" onClick={() => setOpen(o => !o)}>
+      <button style={{fontSize: "1.25vw"}} type="button" className="button" onClick={() => setOpen(o => !o)}>
         Sign In
       </button>
-      <Popup open={open} closeOnDocumentClick onClose={closeModal}>
+      <Popup open={open} closeOnDocumentClick onClose={closeModal} modal>
         <div className="modal">
           <a className="close" onClick={closeModal}>
             &times;
