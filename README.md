@@ -22,13 +22,13 @@ The backend is served at [http://localhost:8080](http://localhost:8080)
 
 A .env file should contain the following:
 
-```
+```sh
 PORT=3000
 SRV_HOST=localhost
 SRV_PORT=8080
 REACT_APP_SERVER=http://$SRV_HOST:$SRV_PORT
-DB_USER=[username; I used MongoDB]
-DB_PASS=[password for DB_USER]
+DB_USER=(username; I used MongoDB)
+DB_PASS=(password for DB_USER)
 DB_NAME=leword
 NODE_ENV=development
 ```

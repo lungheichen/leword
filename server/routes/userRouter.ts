@@ -15,8 +15,11 @@ const router = express.Router()
 router.post(
   '/',
   // gather past data
-  userController.getUser,
+  userController.getUser, // Currently is doing the validation
   // userValidation.foundUser,
+  // Get Cookie, then verify this cookie for all future requests from frontend 
+  // -- use jwt
+  // with the cookie, allow get of past scores and post updates (instead of patch) 
   (req: Request, res: Response) => {
     res.status(200).json(`Password GOOD for ${res.locals.user}`)
   }

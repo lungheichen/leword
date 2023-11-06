@@ -6,6 +6,27 @@ import 'reactjs-popup/dist/index.css';
 //   handleGuess?: Function;
 // }
 
+interface ICredentials {
+  name: string;
+  password: string;
+}
+
+async function loginUser(credentials: ICredentials) {
+  const uri = `${process.env.REACT_APP_SERVER}/user`;
+  console.log(`React: ${JSON.stringify(credentials)}`)
+  if (!uri) {
+    return
+  }
+  return fetch(uri, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+ }
+
 function SigninPopup() {
   // const handleClick = () => {
     // if (props.handleGuess) {
@@ -16,10 +37,20 @@ function SigninPopup() {
   // }x
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const server = process.env.REACT_APP_SERVER;
 
-  // Need to reintroduce the handleSubmit so that it receives the data back
+
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const token = await loginUser({
+      name,
+      password
+    });
+    console.log(token)
+    // setToken(token);
+  }
+
 
   return (
     <div>
@@ -31,15 +62,17 @@ function SigninPopup() {
           <a className="close" onClick={closeModal}>
             &times;
           </a>
-          <form method='POST' action={server+'/user'}>
+          {/* <form method='POST' action={server+'/user'}> */}
+          <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name">Username: </label>
               <input 
                 type="text" 
                 id="name" 
                 name="name" 
-                size={10} 
-                onKeyDown={e => e.stopPropagation()}/>
+                size={10}
+                onKeyDown={e => e.stopPropagation()}
+                onChange={e => setName(e.target.value)}/>
             </div>
             <div>
               <label htmlFor="password">Password: </label>
