@@ -25,6 +25,19 @@ router.post(
   }
 )
 
+router.get(
+  '/',
+  // gather past data
+  userController.getUsers, // Currently is doing the validation
+  // userValidation.foundUser,
+  // Get Cookie, then verify this cookie for all future requests from frontend 
+  // -- use jwt
+  // with the cookie, allow get of past scores and post updates (instead of patch) 
+  (req: Request, res: Response) => {
+    res.status(200).json(`Users: ${res.locals.users}`)
+  }
+)
+
 router.post(
   '/:feedAmount',
   // userValidation.validFeedAmount,

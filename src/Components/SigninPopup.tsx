@@ -8,12 +8,12 @@ import 'reactjs-popup/dist/index.css';
 
 interface ICredentials {
   name: string;
-  password: string;
+  pass: string;
 }
 
 async function loginUser(credentials: ICredentials) {
   const uri = `${process.env.REACT_APP_SERVER}/user`;
-  console.log(`React: ${JSON.stringify(credentials)}`)
+  console.log(`React signin POST request: ${JSON.stringify(credentials)}`)
   if (!uri) {
     return
   }
@@ -38,14 +38,14 @@ function SigninPopup() {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const [pass, setPassword] = useState("");
 
 
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = await loginUser({
       name,
-      password
+      pass
     });
     console.log(token)
     // setToken(token);
@@ -79,8 +79,8 @@ function SigninPopup() {
               <input 
                 type="password" 
                 id="password" 
-                name="password" 
-                value={password} 
+                name="pass" 
+                value={pass} 
                 onKeyDown={e => e.stopPropagation()} 
                 onChange={e => setPassword(e.target.value)} />
             </div>

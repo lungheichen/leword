@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-server": "NODE_ENV=production nodemon ./server/bin/www.ts",
+    "start-server": "nodemon ./server/bin/www.ts",
     "dev": "npm-run-all --parallel start*",
     "build": "react-scripts build",
     "test": "react-scripts test",

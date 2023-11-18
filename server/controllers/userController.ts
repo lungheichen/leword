@@ -11,12 +11,15 @@ const userController: any = {}
 
 userController.getUser = async (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name
-  const password = req.body.password
-  console.log(`name = ${name}`)
+  const pass = req.body.pass
+  console.log(`getUser: name = ${name}`)
   const user = await User.find({
-    name: name,
-    pass: password
+    name: `${name}`,
+    pass: `${pass}`
   })
+  if (user.length != 1) {
+    console.log(`no user found of name: ${name}`)
+  }
   res.locals.user = user
   next()
 }
@@ -24,15 +27,9 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
 
 
 userController.getUsers = async (req: Request, res: Response, next: NextFunction) => {
-  await User.find({}, null, (err: Error, users: Query<any, Document<IUser>>) => {
-    if (err) {
-      // Check this again
-      console.log('we have a problem with getUsers...')
-    }
-    console.log()
-    res.locals.users = users
-    next()
-  })
+  const users = await User.find({})
+  res.locals.users = users
+  next()
 }
 
 userController.addUser = async (req: Request, res: Response, next: NextFunction) => {

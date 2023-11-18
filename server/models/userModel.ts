@@ -34,7 +34,11 @@ if (process.env.NODE_ENV === 'production') {
   // options.pass = process.env.DB_PASS
   // options.dbName = process.env.DB_NAME
   // uri = 'mongodb://btadmin:admin@baby_tracker-db:27017/leword?authSource=admin'
-  uri = 'mongodb://lwadmin:admin@localhost:27017/leword?authSource=admin' 
+  // connecting to mongosh
+  // sudo service mongod start
+  // mongosh --username lwadmin --password admin --host localhost --port 27017 leword
+
+  uri = 'mongodb://lwadmin:admin@localhost:27017/leword' 
 }
 
 console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
