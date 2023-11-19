@@ -1,7 +1,7 @@
 import React from 'react';
 import Key from "./Key";
-import Enter from './Enter'
-import Clear from './Clear'
+import Enter from './Enter';
+import Clear from './Clear';
 
 interface ILastRow {
   letters: string;

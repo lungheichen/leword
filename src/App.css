@@ -7,7 +7,8 @@
   display: flex;
   text-align: center;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
+  /* justify-content: flex-end; */
 }
 
 /* not used any longer */
@@ -27,11 +28,26 @@
   /* background-color: #d3826c; */
   min-height: 1vmin;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
   font-size: calc(10px + 2vmin);
+  justify-content: space-between;
   color: white;
+}
+
+.App-header-div, .App-right-header {
+  width: 100px;
+  font-size: calc(10px + 2vmin);
+  align-items: center;
+  min-height: 1vmin;
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+
+.App-right-header {
+  font-size: 1.25vw;
+  /* background-color: #d3826c; */
+  /* align-items: center; */
 }
 
 .App-link {
@@ -106,4 +122,21 @@
 
 .Debug {
   background-color: #738b7f;
+}
+
+.modal {
+  font-size: 12px;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
 }

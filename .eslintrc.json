@@ -26,5 +26,10 @@
     ],
     "rules": {
         "operator-linebreak": ["error", "after"]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
