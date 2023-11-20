@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import userController from '../controllers/userController'
+import cookieController from '../controllers/cookieController'
 import userValidation from '../validations/userValidation'
 // var router = express.Router();
 const router = express.Router()
@@ -19,9 +20,10 @@ router.post(
   // userValidation.foundUser,
   // Get Cookie, then verify this cookie for all future requests from frontend 
   // -- use jwt
+  cookieController.setSSIDCookie,
   // with the cookie, allow get of past scores and post updates (instead of patch) 
   (req: Request, res: Response) => {
-    res.status(200).json(`Password GOOD for ${res.locals.user}`)
+    res.status(200).json(res.locals.user)
   }
 )
 
@@ -35,16 +37,6 @@ router.get(
   // with the cookie, allow get of past scores and post updates (instead of patch) 
   (req: Request, res: Response) => {
     res.status(200).json(`Users: ${res.locals.users}`)
-  }
-)
-
-router.post(
-  '/:feedAmount',
-  // userValidation.validFeedAmount,
-  userController.addUser,
-  userValidation.gotUser,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.log)
   }
 )
 

@@ -25,6 +25,7 @@ async function loginUser(credentials: ICredentials) {
     body: JSON.stringify(credentials)
   })
     .then(data => data.json())
+    .catch(err => console.log('loginUser: fetch /user: ERROR: ', err));
  }
 
 function SigninPopup() {

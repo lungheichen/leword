@@ -18,7 +18,18 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
     pass: `${pass}`
   })
   if (user.length != 1) {
-    console.log(`no user found of name: ${name}`)
+    return next({
+      log: 'userController.getUser: ERROR: No data from database query - Expected res.locals.user to be non-empty object',
+      message: {err: 'userController.getUser: ERROR: Check server logs for details'},
+    })
+    // res.locals.error = 'userController.getUser: ERROR: Check server logs for details'
+    // err.message = "bad"
+    // err.status = 500
+    // return next()
+    // return next({
+    //   message: 'userController.getUser: ERROR: Check server logs for details',
+    //   status: 500
+    // })
   }
   res.locals.user = user
   next()
