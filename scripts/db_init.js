@@ -16,6 +16,6 @@ db.users.insertOne(
    {
       name: "test",
       pass: "unsalted",
-      last_modified: ""
+      last_modified: Date.now
    },
 )

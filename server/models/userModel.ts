@@ -1,4 +1,4 @@
-import { Schema, model, connect, Document } from 'mongoose'
+import { Schema, Types, model, connect, Document } from 'mongoose'
 import * as dotenv from 'dotenv'
 
 // Enables variables from .env file as process.env
@@ -46,13 +46,13 @@ console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
 export interface IUser extends Document {
   name: string
   pass: string  // To be bcrypted
-  last_modified: string  // Track changes to the password
+  last_modified: Date  // Track changes to the password
 }
 
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true, unique: true },
   pass: { type: String, required: true },
-  last_modified: { type: String, required: true },
+  last_modified: { type: Date, required: true, default: Date.now },
 })
 
 const User = model<IUser>('User', userSchema)

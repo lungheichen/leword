@@ -14,8 +14,8 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
   const pass = req.body.pass
   console.log(`getUser: name = ${name}`)
   const user = await User.find({
-    name: `${name}`,
-    pass: `${pass}`
+    name: name,
+    pass: pass
   })
   if (user.length != 1) {
     return next({
@@ -32,6 +32,7 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
     // })
   }
   res.locals.user = user
+  res.locals.id = res.locals.user._id
   next()
 }
 
