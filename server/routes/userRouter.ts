@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import userController from '../controllers/userController'
 import cookieController from '../controllers/cookieController'
+import sessionController from '../controllers/sessionController'
 import userValidation from '../validations/userValidation'
 // var router = express.Router();
 const router = express.Router()
@@ -12,7 +13,11 @@ const router = express.Router()
 
 
 
-
+/**
+ * Post request to authenticate user with password,
+ * then store user id in a cookie,
+ * and create and save a new session into the database
+ */ 
 router.post(
   '/',
   // gather past data
@@ -21,9 +26,12 @@ router.post(
   // Get Cookie, then verify this cookie for all future requests from frontend 
   // -- use jwt
   cookieController.setSSIDCookie,
-  // with the cookie, allow get of past scores and post updates (instead of patch) 
+  // then set up session that checks if the _id from the cookie has not expired
+  // with the session, allow GET request of past scores and POST request updated scores (instead of patch)
+  sessionController.startSession,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.user)
+    // res.status(200).json({})
   }
 )
 

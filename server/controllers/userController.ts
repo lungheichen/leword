@@ -17,6 +17,8 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
     name: name,
     pass: pass
   })
+  console.log('user found; data:')
+  console.log(user)
   if (user.length != 1) {
     return next({
       log: 'userController.getUser: ERROR: No data from database query - Expected res.locals.user to be non-empty object',
@@ -32,7 +34,8 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
     // })
   }
   res.locals.user = user
-  res.locals.id = res.locals.user._id
+  res.locals.id = user[0]._id
+  
   next()
 }
 
