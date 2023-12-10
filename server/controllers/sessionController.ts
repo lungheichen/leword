@@ -36,6 +36,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
 sessionController.startSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = res.locals.id
+    console.log(`sessionController.startSession: id = ${id}`)
     const insertSession = await Session.create({'cookieId': id})
     console.log(`insertSession = ${insertSession}`)
     next()

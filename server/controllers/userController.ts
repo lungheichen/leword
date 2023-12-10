@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Query, Document } from 'mongoose'
-import User, { IUser } from '../models/userModel'
+import { User, IUser, Score, IScore, Guess, IGuess } from '../models/userModel'
 import { DeleteResult, ObjectId } from 'mongodb'
 
 const userController: any = {}
@@ -40,6 +40,38 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
 }
 
 
+userController.createUser = async (req: Request, res: Response, next: NextFunction) => {
+  const name = req.body.name
+  const pass = req.body.pass
+  const user: IUser = await User.create({
+    name: name,
+    pass: pass,
+  })
+  console.log('Added user on', user.last_modified)
+  
+  const user_id = user._id
+  const win_at_try: Record<string, number> = {}
+  const last_played = new Date()
+  const guesses: Record<string, string> = {}
+  for (let i = 1; i < 7; i++) {
+    win_at_try[i] = 0
+    guesses[i] = ""
+  }
+  const score: IScore = await Score.create({
+    user_id: user_id,
+    win_at_try: win_at_try,
+    last_played: last_played,
+  })
+  const guess: IGuess = await Guess.create({
+    user_id: user_id,
+    attempt: 1,
+    guesses: guesses
+  })
+  console.log('userController.createScore: added new score')
+  res.locals.id = user._id
+  return next()
+}
+
 
 userController.getUsers = async (req: Request, res: Response, next: NextFunction) => {
   const users = await User.find({})
@@ -47,19 +79,6 @@ userController.getUsers = async (req: Request, res: Response, next: NextFunction
   next()
 }
 
-userController.addUser = async (req: Request, res: Response, next: NextFunction) => {
-  const last_modified = new Date()
-  const name = req.params.name
-  const pass = req.params.pass
-  const user: IUser = await User.create({
-    name: name,
-    pass: pass,
-    last_modified: last_modified.toTimeString()
-  })
-  console.log('Added user on', user.last_modified)
-  res.locals.user = user
-  return next()
-}
 
 // Delete One User...
 userController.deleteUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -104,6 +123,27 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
   )
   console.log('Replaced user with _id = ', _id)
   res.locals.user = user
+  return next()
+}
+
+
+// Update score based on win attempt number
+// this will be called after cookie check
+// How should I store attempt?  In Score or in it's own database??
+userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
+  const user_id = req.cookies.ssid // this will already check that it isn't null
+  console.log(user_id)
+  const updatedScore: IScore = req.body
+  const score = await Score.updateOne(
+    {
+      _id: new ObjectId(user_id)
+    },
+    {
+      $set: updatedScore
+    }
+  )
+  console.log('Replaced user with _id = ', user_id)
+  res.locals.user_id = user_id
   return next()
 }
 

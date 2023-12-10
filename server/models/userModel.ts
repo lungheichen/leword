@@ -46,7 +46,7 @@ console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
 export interface IUser extends Document {
   name: string
   pass: string  // To be bcrypted
-  last_modified: Date  // Track changes to the password
+  last_modified?: Date  // Track changes to the password
 }
 
 const userSchema = new Schema<IUser>({
@@ -55,12 +55,38 @@ const userSchema = new Schema<IUser>({
   last_modified: { type: Date, required: true, default: Date.now },
 })
 
-const User = model<IUser>('User', userSchema)
+export const User = model<IUser>('User', userSchema)
+
+export interface IScore extends Document {
+  user_id: Types.ObjectId
+  win_at_try: Map<string, number>
+  last_played: Date
+}
+
+const scoreSchema = new Schema({
+  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
+  win_at_try: { type: Map, of: Number },
+  last_played: Date,
+})
+
+export const Score = model<IScore>('Score', scoreSchema)
+
+export interface IGuess extends Document {
+  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
+  attempt: number
+  guesses: Map<string, string>
+}
+
+const guessSchema = new Schema({
+  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
+  attempt: Number,
+  guesses: Map<string, string>,
+})
+
+export const Guess = model<IGuess>('Guess', guessSchema)
 
 main().catch((err) => console.log(err))
 
 async function main(): Promise<void> {
   await connect(uri, options)
 }
-
-export default User

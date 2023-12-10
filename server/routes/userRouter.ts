@@ -22,6 +22,8 @@ router.post(
   '/',
   // gather past data
   userController.getUser, // Currently is doing the validation
+  // then check on last played date to match with today's date
+  // then check on attempt number
   // userValidation.foundUser,
   // Get Cookie, then verify this cookie for all future requests from frontend 
   // -- use jwt
@@ -34,6 +36,32 @@ router.post(
     // res.status(200).json({})
   }
 )
+
+
+/**
+ * Post request to create user,
+ * then store user id in a cookie,
+ * and create and save a new session into the database
+ */ 
+router.post(
+  '/create',
+  // gather past data
+  userController.createUser, // Currently is doing the validation
+  // then check on last played date to match with today's date
+  // then check on attempt number
+  // userValidation.foundUser,
+  // Get Cookie, then verify this cookie for all future requests from frontend 
+  // -- use jwt
+  cookieController.setSSIDCookie,
+  // then set up session that checks if the _id from the cookie has not expired
+  // with the session, allow GET request of past scores and POST request updated scores (instead of patch)
+  sessionController.startSession,
+  (req: Request, res: Response) => {
+    res.status(200).json({})
+    // res.status(200).json({})
+  }
+)
+
 
 router.get(
   '/',
