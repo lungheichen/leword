@@ -21,7 +21,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
       next()
     }
   })
-  // Session.findOne({'cookieId': id}, (err, session) => {
+  // Session.findOne({'cookie_id': id}, (err, session) => {
   //   if (!session) {
   //     // in the future, change it so that it redirects to login instead
   //     return res.render('./../client/signup', {error: "session ended or not started please sign up or log in again"})
@@ -37,7 +37,8 @@ sessionController.startSession = async (req: Request, res: Response, next: NextF
   try {
     const id = res.locals.id
     console.log(`sessionController.startSession: id = ${id}`)
-    const insertSession = await Session.create({'cookieId': id})
+    // insertSession not working
+    const insertSession = await Session.create({'cookie_id': id})
     console.log(`insertSession = ${insertSession}`)
     next()
   } catch (err) {
