@@ -37,7 +37,6 @@ sessionController.startSession = async (req: Request, res: Response, next: NextF
   try {
     const id = res.locals.id
     console.log(`sessionController.startSession: id = ${id}`)
-    // insertSession not working
     const insertSession = await Session.create({'cookie_id': id})
     console.log(`insertSession = ${insertSession}`)
     next()

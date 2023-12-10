@@ -39,7 +39,7 @@ router.post(
 
 
 /**
- * Post request to create user,
+ * Post request to create user and its associated guess and score models,
  * then store user id in a cookie,
  * and create and save a new session into the database
  */ 
@@ -47,18 +47,26 @@ router.post(
   '/create',
   // gather past data
   userController.createUser, // Currently is doing the validation
-  // then check on last played date to match with today's date
-  // then check on attempt number
-  // userValidation.foundUser,
-  // Get Cookie, then verify this cookie for all future requests from frontend 
-  // -- use jwt
   cookieController.setSSIDCookie,
-  // then set up session that checks if the _id from the cookie has not expired
-  // with the session, allow GET request of past scores and POST request updated scores (instead of patch)
   sessionController.startSession,
   (req: Request, res: Response) => {
     res.status(200).json({})
-    // res.status(200).json({})
+  }
+)
+
+
+/**
+ * Compare answer to guess,
+ * then update score and guess models
+ */
+router.patch(
+  '/submit_guess/',
+  // userValidation.validFeedAmount, // need to change this to body?
+  // userValidation.validId,  // I don't need this only valid Ids should ever pass through
+  userController.updateUser,
+  userValidation.gotUser,
+  (req: Request, res: Response) => {
+    res.status(200).json(res.locals.log)
   }
 )
 
@@ -76,11 +84,13 @@ router.get(
   }
 )
 
+
 // delete one.  Example:
 // "61c9356a3f656caa94495769"
 router.delete('/', userController.deleteUser, userValidation.deletedUser, (req: Request, res: Response) => {
   res.status(200).json(`deleted log with _id: ${res.locals._id}`)
 })
+
 
 router.delete(
   '/all',
@@ -88,17 +98,6 @@ router.delete(
   // userValidation.deletedUser,
   (req: Request, res: Response) => {
     res.status(200).json(`deleted logs. Total logs: ${res.locals.deletedCount}`)
-  }
-)
-
-router.patch(
-  '/:id',
-  // userValidation.validFeedAmount, // need to change this to body?
-  // userValidation.validId,  // I don't need this only valid Ids should ever pass through
-  userController.updateUser,
-  userValidation.gotUser,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.log)
   }
 )
 
