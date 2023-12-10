@@ -57,16 +57,18 @@ router.post(
 
 /**
  * Compare answer to guess,
- * then update score and guess models
+ * check cookie,
+ * then update score and guess document tied to userId
  */
 router.patch(
-  '/submit_guess/',
-  // userValidation.validFeedAmount, // need to change this to body?
-  // userValidation.validId,  // I don't need this only valid Ids should ever pass through
-  userController.updateUser,
-  userValidation.gotUser,
+  '/guess/',
+  sessionController.isLoggedIn,
+  userController.compareGuess,  // check based on date or answer_id
+                                // and pass right or wrong
+  // userController.updateAttempt,
+  // userController.updateScore,  // then update score
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.log)
+    res.status(200).json(res.locals.isCorrect)
   }
 )
 
@@ -86,7 +88,7 @@ router.get(
 
 
 // delete one.  Example:
-// "61c9356a3f656caa94495769"
+// '61c9356a3f656caa94495769'
 router.delete('/', userController.deleteUser, userValidation.deletedUser, (req: Request, res: Response) => {
   res.status(200).json(`deleted log with _id: ${res.locals._id}`)
 })

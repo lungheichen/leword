@@ -46,39 +46,39 @@ console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
 export interface IUser extends Document {
   name: string
   pass: string  // To be bcrypted
-  last_modified?: Date  // Track changes to the password
+  lastModified?: Date  // Track changes to the password
 }
 
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true, unique: true },
   pass: { type: String, required: true },
-  last_modified: { type: Date, required: true, default: Date.now },
+  lastModified: { type: Date, required: true, default: Date.now },
 })
 
 export const User = model<IUser>('User', userSchema)
 
 export interface IScore extends Document {
-  user_id: Types.ObjectId
-  win_at_try: Map<string, number>
-  last_played: Date
+  userId: Types.ObjectId
+  winAtTry: Map<string, number>
+  lastPlayed: Date
 }
 
 const scoreSchema = new Schema({
-  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
-  win_at_try: { type: Map, of: Number },
-  last_played: Date,
+  userId: { type: Schema.Types.ObjectId, ref: 'user' },
+  winAtTry: { type: Map, of: Number },
+  lastPlayed: Date,
 })
 
 export const Score = model<IScore>('Score', scoreSchema)
 
 export interface IGuess extends Document {
-  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
+  userId: { type: Schema.Types.ObjectId, ref: 'user' },
   attempt: number
   guesses: Map<string, string>
 }
 
 const guessSchema = new Schema({
-  user_id: { type: Schema.Types.ObjectId, ref: 'user' },
+  userId: { type: Schema.Types.ObjectId, ref: 'user' },
   attempt: Number,
   guesses: Map<string, string>,
 })

@@ -8,7 +8,7 @@ cookieController.setSSIDCookie = (req: Request, res: Response, next: NextFunctio
   const id = res.locals.id
   console.log(`id in cookiesController.setSSIDCookie: ${id}`)
   var token = jwt.sign(
-    { 'cookie_id': id },
+    { 'cookieId': id },
     'secret2000',
     { expiresIn: 900 }  // 15 minutes
   )

@@ -25,7 +25,7 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
       message: {err: 'userController.getUser: ERROR: Check server logs for details'},
     })
     // res.locals.error = 'userController.getUser: ERROR: Check server logs for details'
-    // err.message = "bad"
+    // err.message = 'bad'
     // err.status = 500
     // return next()
     // return next({
@@ -47,23 +47,23 @@ userController.createUser = async (req: Request, res: Response, next: NextFuncti
     name: name,
     pass: pass,
   })
-  console.log('Added user on', user.last_modified)
+  console.log('Added user on', user.lastModified)
   
-  const user_id = user._id
-  const win_at_try: Record<string, number> = {}
-  const last_played = new Date()
+  const userId = user._id
+  const winAtTry: Record<string, number> = {}
+  const lastPlayed = new Date()
   const guesses: Record<string, string> = {}
   for (let i = 1; i < 7; i++) {
-    win_at_try[i] = 0
-    guesses[i] = ""
+    winAtTry[i] = 0
+    guesses[i] = ''
   }
   const score: IScore = await Score.create({
-    user_id: user_id,
-    win_at_try: win_at_try,
-    last_played: last_played,
+    userId: userId,
+    winAtTry: winAtTry,
+    lastPlayed: lastPlayed,
   })
   const guess: IGuess = await Guess.create({
-    user_id: user_id,
+    userId: userId,
     attempt: 1,
     guesses: guesses
   })
@@ -127,23 +127,36 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
 }
 
 
+// Compare guess to answer
+userController.compareGuess = (req: Request, res: Response, next: NextFunction) => {
+  const guess = req.body.guess
+  // Set up database for daily answers to compare to
+  const answer = 'apple'
+  res.locals.isCorrect = (guess === answer)
+  return next()
+}
+
 // Update score based on win attempt number
 // this will be called after cookie check
 // How should I store attempt?  In Score or in it's own database??
 userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
-  const user_id = req.cookies.ssid // this will already check that it isn't null
-  console.log(user_id)
+  if (!res.locals.isCorrect) {
+    // increase attempt
+    next()
+  }
+  const userId = req.cookies.ssid // this will already check that it isn't null
+  console.log(userId)
   const updatedScore: IScore = req.body
   const score = await Score.updateOne(
     {
-      _id: new ObjectId(user_id)
+      _id: new ObjectId(userId)
     },
     {
       $set: updatedScore
     }
   )
-  console.log('Replaced user with _id = ', user_id)
-  res.locals.user_id = user_id
+  console.log('Replaced user with _id = ', userId)
+  res.locals.userId = userId
   return next()
 }
 

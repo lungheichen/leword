@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 
 const userValidation: any = {}
 
+
 userValidation.gotUsers = (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.users) {
     return next({
