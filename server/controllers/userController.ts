@@ -69,7 +69,7 @@ userController.createUser = async (req: Request, res: Response, next: NextFuncti
   })
   console.log('userController.createScore: added new score')
   res.locals.id = user._id
-  return next()
+  next()
 }
 
 
@@ -123,7 +123,7 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
   )
   console.log('Replaced user with _id = ', _id)
   res.locals.user = user
-  return next()
+  next()
 }
 
 
@@ -131,34 +131,124 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
 userController.compareGuess = (req: Request, res: Response, next: NextFunction) => {
   const guess = req.body.guess
   // Set up database for daily answers to compare to
+  // set up so that database 
   const answer = 'apple'
   res.locals.isCorrect = (guess === answer)
-  return next()
+  res.locals.guess = guess
+  next()
+}
+
+
+// Get current attempt from the guess document
+// in order to determine current attempt value
+userController.getCurrentAttempt = async (req: Request, res: Response, next: NextFunction) => {
+
+  
+  next()
 }
 
 // Update score based on win attempt number
 // this will be called after cookie check
 // How should I store attempt?  In Score or in it's own database??
-userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
+// or just call it handle attempt
+userController.updateAttempt = async (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.isCorrect) {
     // increase attempt
-    next()
+    const userId = res.locals.id
+    const currentGuess = res.locals.guess
+    const guess = await Guess.findOne(
+      {
+        userId: new ObjectId(userId)
+      }
+    )
+    // Perform all checks on guess; e.g., 6 attempts
+    if (!guess) {
+      return next({
+        log: 'userController.updateAttempt: ERROR: No data from database query - Expected guess to be non-empty object',
+        message: {err: 'userController.updateAttempt: ERROR: Check server logs for details'},
+      })
+    }
+    const updateDetails = await Guess.updateOne(
+      {
+        userId: new ObjectId(userId)
+      },
+      {
+        $inc: { 'attempt': 1 },  // increment attempt by one
+        $set: {   // keep the document, but modify one field
+          [`guesses.${guess.attempt}`]: currentGuess
+        }
+      }
+    )
+
+    console.log("userController.updateAttempt: updateDetails = ")
+    console.log(updateDetails)
+    return next()
+    // const updatedScore: IScore = req.body
   }
-  const userId = req.cookies.ssid // this will already check that it isn't null
-  console.log(userId)
-  const updatedScore: IScore = req.body
-  const score = await Score.updateOne(
+  // Else: correct answer so go to userController.updateScore!
+  next()
+  // const score = await Score.updateOne(
+  //   {
+  //     _id: new ObjectId(userId)
+  //   },
+  //   {
+  //     $set: updatedScore
+  //   }
+  // )
+  // console.log('Replaced user with _id = ', userId)
+  // res.locals.userId = userId
+  // return next()
+}
+
+userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
+  if (res.locals.isCorrect) {
+    // increase attempt
+    const userId = res.locals.id
+    const score = await Score.updateOne(
+      {
+        userId: new ObjectId(userId)
+      },
+      {
+        $set: { 
+          "winAtTry.1": 1
+        }
+      }
+    )
+    console.log('Replaced user with _id = ', userId)
+    res.locals.userId = userId
+    return next()
+  }
+  // Else: wrong answer so handled alraedy by to userController.updateAttempt!
+  next()
+}
+
+
+// Update score based on win attempt number
+// this will be called after cookie check
+// How should I store attempt?  In Score or in it's own database??
+// or just call it handle attempt
+userController.resetGuesses = async (req: Request, res: Response, next: NextFunction) => {
+  // increase attempt
+  const userId = res.locals.id
+  const guess = await Guess.updateOne(
     {
-      _id: new ObjectId(userId)
+      userId: new ObjectId(userId)
     },
     {
-      $set: updatedScore
+      $set: { 
+        'attempt': 1,
+        'guesses': {
+          '1': '', '2': '', '3': '', '4': '', '5': '', '6': ''
+        }
+      }
     }
   )
-  console.log('Replaced user with _id = ', userId)
-  res.locals.userId = userId
-  return next()
+
+  console.log("userController.resetGuesses: reset complete")
+  // Else: correct answer so go to userController.updateScore!
+  next()
 }
+
 
 // db.users.update({feedAmount: 0}, {$set: {feedAmount: 10}})
 

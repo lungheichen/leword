@@ -11,14 +11,18 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
     console.log('cookies missing; please sign up or log in again')
   }
   const ssid = req.cookies.ssid
-  console.log(ssid)
   jwt.verify(ssid, 'secret2000', (err: any, decoded: any) => {
     if (err) {
       console.log(err)
       // return res.render('./../client/signup', {error: 'session ended please sign up or log in again'})
+      return next({
+        log: 'sessionController.isLoggedIn: ERROR: An unexpected error occurred at cookie verification',
+        message: {err: 'sessionController.isLoggedIn: ERROR: Check server logs for details'},
+      })
     } else {
       console.log(decoded)
       res.locals.id = decoded.cookieId
+      console.log(`sessionController.isLoggedIn: res.locals.id = ${res.locals.id}`)
       next()
     }
   })
@@ -43,6 +47,7 @@ sessionController.startSession = async (req: Request, res: Response, next: NextF
     next()
   } catch (err) {
     // catch errors, such as when there are duplicates
+    // I think it errors out when I have a cookie already because it won't replace it?
     return next({
       log: 'sessionController.startSession: ERROR: An unexpected error occurred at session insert',
       message: {err: 'sessionController.startSession: ERROR: Check server logs for details'},

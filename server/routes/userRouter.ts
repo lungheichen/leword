@@ -64,11 +64,22 @@ router.patch(
   '/guess/',
   sessionController.isLoggedIn,
   userController.compareGuess,  // check based on date or answer_id
-                                // and pass right or wrong
-  // userController.updateAttempt,
+  // and pass right or wrong
+  userController.getCurrentAttempt,
+  userController.updateAttempt,
   // userController.updateScore,  // then update score
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.isCorrect)
+  }
+)
+
+
+router.put(
+  '/guess/reset/',
+  sessionController.isLoggedIn,
+  userController.resetGuesses,
+  (req: Request, res: Response) => {
+    res.status(200).json({})
   }
 )
 

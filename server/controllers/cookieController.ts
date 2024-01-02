@@ -10,7 +10,7 @@ cookieController.setSSIDCookie = (req: Request, res: Response, next: NextFunctio
   var token = jwt.sign(
     { 'cookieId': id },
     'secret2000',
-    { expiresIn: 900 }  // 15 minutes
+    { expiresIn: 9000 }  // 150 minutes
   )
   // store cookie with user
   res.cookie('ssid', token, { httpOnly: true , secure: true})
