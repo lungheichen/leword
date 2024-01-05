@@ -5,7 +5,7 @@ const cookieController: any = {}
 
 // store the user id in a cookie
 cookieController.setSSIDCookie = (req: Request, res: Response, next: NextFunction) => {
-  const id = res.locals.id
+  const id = res.locals.userId
   console.log(`id in cookiesController.setSSIDCookie: ${id}`)
   var token = jwt.sign(
     { 'cookieId': id },

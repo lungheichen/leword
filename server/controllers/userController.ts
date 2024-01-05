@@ -34,7 +34,7 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
     // })
   }
   res.locals.user = user
-  res.locals.id = user[0]._id
+  res.locals.userId = user[0]._id
   
   next()
 }
@@ -68,7 +68,7 @@ userController.createUser = async (req: Request, res: Response, next: NextFuncti
     guesses: guesses
   })
   console.log('userController.createScore: added new score')
-  res.locals.id = user._id
+  res.locals.userId = user._id
   next()
 }
 
@@ -141,9 +141,23 @@ userController.compareGuess = (req: Request, res: Response, next: NextFunction) 
 
 // Get current attempt from the guess document
 // in order to determine current attempt value
+// e.g., used in userController.updateAttempt for updating guesses
 userController.getCurrentAttempt = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = res.locals.userId
+  const guess = await Guess.findOne(
+    {
+      userId: new ObjectId(userId)
+    }
+  )
+  // Perform all checks on guess; e.g., 6 attempts
+  if (!guess) {
+    return next({
+      log: 'userController.updateAttempt: ERROR: No data from database query - Expected guess to be non-empty object',
+      message: {err: 'userController.updateAttempt: ERROR: Check server logs for details'},
+    })
+  }
+  res.locals.attempt = guess.attempt
 
-  
   next()
 }
 
@@ -154,28 +168,15 @@ userController.getCurrentAttempt = async (req: Request, res: Response, next: Nex
 userController.updateAttempt = async (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.isCorrect) {
     // increase attempt
-    const userId = res.locals.id
+    const userId = res.locals.userId
     const currentGuess = res.locals.guess
-    const guess = await Guess.findOne(
-      {
-        userId: new ObjectId(userId)
-      }
-    )
-    // Perform all checks on guess; e.g., 6 attempts
-    if (!guess) {
-      return next({
-        log: 'userController.updateAttempt: ERROR: No data from database query - Expected guess to be non-empty object',
-        message: {err: 'userController.updateAttempt: ERROR: Check server logs for details'},
-      })
-    }
+    const attempt = res.locals.attempt
     const updateDetails = await Guess.updateOne(
-      {
-        userId: new ObjectId(userId)
-      },
+      { userId: new ObjectId(userId) },
       {
         $inc: { 'attempt': 1 },  // increment attempt by one
         $set: {   // keep the document, but modify one field
-          [`guesses.${guess.attempt}`]: currentGuess
+          [`guesses.${attempt}`]: currentGuess
         }
       }
     )
@@ -187,35 +188,22 @@ userController.updateAttempt = async (req: Request, res: Response, next: NextFun
   }
   // Else: correct answer so go to userController.updateScore!
   next()
-  // const score = await Score.updateOne(
-  //   {
-  //     _id: new ObjectId(userId)
-  //   },
-  //   {
-  //     $set: updatedScore
-  //   }
-  // )
-  // console.log('Replaced user with _id = ', userId)
-  // res.locals.userId = userId
-  // return next()
 }
 
 userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
   if (res.locals.isCorrect) {
     // increase attempt
-    const userId = res.locals.id
+    const userId = res.locals.userId
+    const attempt = res.locals.attempt
     const score = await Score.updateOne(
       {
         userId: new ObjectId(userId)
       },
       {
-        $set: { 
-          "winAtTry.1": 1
-        }
+        $inc: { [`winAtTry.${attempt}`]: 1 }
       }
     )
-    console.log('Replaced user with _id = ', userId)
-    res.locals.userId = userId
+    console.log('userController.updateScore: score increased by one')
     return next()
   }
   // Else: wrong answer so handled alraedy by to userController.updateAttempt!
@@ -229,7 +217,7 @@ userController.updateScore = async (req: Request, res: Response, next: NextFunct
 // or just call it handle attempt
 userController.resetGuesses = async (req: Request, res: Response, next: NextFunction) => {
   // increase attempt
-  const userId = res.locals.id
+  const userId = res.locals.userId
   const guess = await Guess.updateOne(
     {
       userId: new ObjectId(userId)

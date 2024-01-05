@@ -66,8 +66,8 @@ router.patch(
   userController.compareGuess,  // check based on date or answer_id
   // and pass right or wrong
   userController.getCurrentAttempt,
-  userController.updateAttempt,
-  // userController.updateScore,  // then update score
+  userController.updateAttempt,  // update attempt if guess is wrong
+  userController.updateScore,  // update score if guess is correct
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.isCorrect)
   }

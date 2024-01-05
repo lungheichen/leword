@@ -21,8 +21,8 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
       })
     } else {
       console.log(decoded)
-      res.locals.id = decoded.cookieId
-      console.log(`sessionController.isLoggedIn: res.locals.id = ${res.locals.id}`)
+      res.locals.userId = decoded.cookieId
+      console.log(`sessionController.isLoggedIn: res.locals.userId = ${res.locals.userId}`)
       next()
     }
   })
@@ -40,7 +40,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
 // start session with log-in
 sessionController.startSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = res.locals.id
+    const id = res.locals.userId
     console.log(`sessionController.startSession: id = ${id}`)
     const insertSession = await Session.create({'cookieId': id})
     console.log(`insertSession = ${insertSession}`)
