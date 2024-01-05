@@ -42,6 +42,7 @@ sessionController.startSession = async (req: Request, res: Response, next: NextF
   try {
     const id = res.locals.userId
     console.log(`sessionController.startSession: id = ${id}`)
+    // Validation: check if session already exists. If so, overwrite.
     const insertSession = await Session.create({'cookieId': id})
     console.log(`insertSession = ${insertSession}`)
     next()

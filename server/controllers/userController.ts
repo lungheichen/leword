@@ -43,6 +43,7 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
 userController.createUser = async (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name
   const pass = req.body.pass
+  // Validation: check if user name already exists
   const user: IUser = await User.create({
     name: name,
     pass: pass,
@@ -92,17 +93,29 @@ userController.deleteUser = async (req: Request, res: Response, next: NextFuncti
   next()
 }
 
-// Delete All Users... not a normal thing to do
-userController.deleteAllUsers = async (req: Request, res: Response, next: NextFunction) => {
-  const deleteResponse: DeleteResult = await User.deleteMany({})
-  res.locals.deletedCount = deleteResponse.deletedCount
+// Delete all users, guesses, and scores ... not a normal thing to do
+userController.deleteAll = async (req: Request, res: Response, next: NextFunction) => {
+  const deleteResponseUsers: DeleteResult = await User.deleteMany({})
+  const deleteResponseScores: DeleteResult = await Score.deleteMany({})
+  const deleteResponseGuesses: DeleteResult = await Guess.deleteMany({})
+  if (
+    deleteResponseUsers != deleteResponseScores && deleteResponseUsers != deleteResponseGuesses
+  ) {
+    return next({
+      log: 'userController.deleteAll: ERROR: deleted more score or guess documents than user documents',
+      message: {err: 'userController.deleteAll: ERROR: Check server logs for details'},
+    })
+  }
+  res.locals.deletedCount = deleteResponseUsers.deletedCount
   console.log(`res.locals.deletedCount = ${res.locals.deletedCount}`)
   next()
 }
-// for now, use:
+// though mongo:
 // mongo
-// use babyTracker
+// use leword
 // db.users.deleteMany({})
+// db.guesses.deleteMany({})
+// db.scores.deleteMany({})
 
 // should be able to update date, time, or feed amount using id
 userController.updateUser = async (req: Request, res: Response, next: NextFunction) => {

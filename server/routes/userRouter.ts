@@ -74,6 +74,9 @@ router.patch(
 )
 
 
+/**
+ * Reset Guesses
+ */
 router.put(
   '/guess/reset/',
   sessionController.isLoggedIn,
@@ -84,6 +87,9 @@ router.put(
 )
 
 
+/**
+ * Get all users
+ */
 router.get(
   '/',
   // gather past data
@@ -105,9 +111,12 @@ router.delete('/', userController.deleteUser, userValidation.deletedUser, (req: 
 })
 
 
+/**
+ * Delete all users
+ */
 router.delete(
   '/all',
-  userController.deleteAllUsers,
+  userController.deleteAll,
   // userValidation.deletedUser,
   (req: Request, res: Response) => {
     res.status(200).json(`deleted logs. Total logs: ${res.locals.deletedCount}`)
