@@ -13,7 +13,8 @@ cookieController.setSSIDCookie = (req: Request, res: Response, next: NextFunctio
     { expiresIn: 9000 }  // 150 minutes
   )
   // store cookie with user
-  res.cookie('ssid', token, { httpOnly: true , secure: true})
+  res.cookie('ssid', token, { httpOnly: true , secure: true, maxAge: 1000*9000})
+  console.log("cookieController.setSSIDCookie: cookie created")
   next()
 }
 

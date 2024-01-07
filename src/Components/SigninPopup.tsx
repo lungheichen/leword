@@ -19,6 +19,7 @@ async function loginUser(credentials: ICredentials) {
   }
   return fetch(uri, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },

@@ -3,12 +3,13 @@ import userController from '../controllers/userController'
 import cookieController from '../controllers/cookieController'
 import sessionController from '../controllers/sessionController'
 import userValidation from '../validations/userValidation'
+
 // var router = express.Router();
 const router = express.Router()
 
-// /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
+// /* Get board */
+// router.get('/', function(req: Request, res: Response) {
+//   res.status(200).json({res.locals.board})
 // });
 
 
@@ -69,7 +70,7 @@ router.patch(
   userController.updateAttempt,  // update attempt if guess is wrong
   userController.updateScore,  // update score if guess is correct
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.isCorrect)
+    res.status(200).json(res.locals.colors)
   }
 )
 

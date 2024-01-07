@@ -31,21 +31,23 @@ function App() {
   // All 6 guesses representing the 6 rows on the board
   // Probably should convert to using array of arrays for guesses in order to deal with sync issues
   const [guesses, setGuesses] = useState(blankLetters);
+
+  // Get board colors
   const blankColors = [];
   for (let i = 0; i < 6; i += 1) {
-    blankColors.push([' ', ' ', ' ', ' ', ' ', ' ']);
+    blankColors.push([' ', ' ', ' ', ' ', ' ']);
   }
   const [boardColors, setBoardColors] = useState(blankColors);
+
   const blankColorDict: { [letter: string]: string } = {};
   for (let c = 65; c <= 90; c += 1) {
     blankColorDict[String.fromCharCode(c)] = ' ';
   }
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
+
   const getWord = () => {
-    // do fetch from server, then set word to response
-    // later... this will check the word on each submit
-    // setword will no longer be needed
+    // depreciated; don't want the user to have the password
     setWord('APPLE');
   };
 
@@ -69,7 +71,7 @@ function App() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(guess.toLowerCase())
     if (keyInd === 5) {
       // check if word is in dictSet first
@@ -81,14 +83,32 @@ function App() {
       const temp = guesses;
       temp[rowInd] = guess;
       setGuesses(temp);
+
       // include additional logic to color letters
       const colorsTemp = boardColors;
-      colorsTemp[rowInd] = guessCheck(word, guess);
+      // Submit get request with body containing guess
+      // response of colors as array of letters representing colors
+      const colors: string[] = await guessCheck(word, guess)
+      console.log(`client: colors = `)
+      console.log(colors)
+      if (colors.length !== 5) {
+        return
+      }
 
+      colorsTemp[rowInd] = colors
       setBoardColors(colorsTemp);
       // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
+
+      var guessIsCorrect = true;
+      for (let i = 0; i < 5; i++) {
+        if (colors[i] !== 'g') {
+          guessIsCorrect = false;
+          break
+        }
+      }
+
       setKeyboardColors(getKeyboardColors(keyboardColors, guess, colorsTemp[rowInd]));
-      if (guess === word) {
+      if (guessIsCorrect) {
         // setLogger('You win!');
         console.log('correct guess');
         // lazy fix; I should be able to just disable key logging

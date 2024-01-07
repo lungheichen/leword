@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Query, Document } from 'mongoose'
 import { User, IUser, Score, IScore, Guess, IGuess } from '../models/userModel'
 import { DeleteResult, ObjectId } from 'mongodb'
+import getGuessColors from '../helpers/getGuessColors'
 
 const userController: any = {}
 
@@ -142,15 +143,20 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
 
 // Compare guess to answer
 userController.compareGuess = (req: Request, res: Response, next: NextFunction) => {
-  const guess = req.body.guess
-  // Set up database for daily answers to compare to
-  // set up so that database 
+  const guess: string = req.body.guess.toLowerCase()
+  console.log(`userController.compareGuess: guess = ${guess}`)
   const answer = 'apple'
+  // Set up database for daily answers to compare to
+  // set up so that database...
+  
+  // build array of string of letters representing colors to send back in json
+  const colors = getGuessColors(answer, guess)
+  res.locals.colors = colors
+  
   res.locals.isCorrect = (guess === answer)
   res.locals.guess = guess
   next()
 }
-
 
 // Get current attempt from the guess document
 // in order to determine current attempt value
