@@ -41,6 +41,28 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
 }
 
 
+/**
+ * Get saved guesses for login and when returning to a daily game
+ * this will be called after cookie check
+ */
+userController.getSavedGuesses = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = res.locals.userId
+  const guess = await Guess.findOne(
+    { userId: new ObjectId(userId) }
+  )
+  console.log("userController.getSavedGuesses: guess = ")
+  console.log(guess)
+  if (!guess) {
+    return next({
+      log: 'userController.getSavedGuesses: ERROR: no guess document found for the user',
+      message: {err: 'userController.getSavedGuesses: ERROR: Check server logs for details'},
+    })
+  }
+  res.locals.guesses = guess.guesses
+  next()
+}
+
+
 userController.createUser = async (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name
   const pass = req.body.pass
@@ -160,7 +182,7 @@ userController.compareGuess = (req: Request, res: Response, next: NextFunction) 
 
 // Get current attempt from the guess document
 // in order to determine current attempt value
-// e.g., used in userController.updateAttempt for updating guesses
+// e.g., used in userController.updateGuess for updating guesses
 userController.getCurrentAttempt = async (req: Request, res: Response, next: NextFunction) => {
   const userId = res.locals.userId
   const guess = await Guess.findOne(
@@ -171,8 +193,8 @@ userController.getCurrentAttempt = async (req: Request, res: Response, next: Nex
   // Perform all checks on guess; e.g., 6 attempts
   if (!guess) {
     return next({
-      log: 'userController.updateAttempt: ERROR: No data from database query - Expected guess to be non-empty object',
-      message: {err: 'userController.updateAttempt: ERROR: Check server logs for details'},
+      log: 'userController.updateGuess: ERROR: No data from database query - Expected guess to be non-empty object',
+      message: {err: 'userController.updateGuess: ERROR: Check server logs for details'},
     })
   }
   res.locals.attempt = guess.attempt
@@ -180,35 +202,39 @@ userController.getCurrentAttempt = async (req: Request, res: Response, next: Nex
   next()
 }
 
-// Update score based on win attempt number
-// this will be called after cookie check
-// How should I store attempt?  In Score or in it's own database??
-// or just call it handle attempt
-userController.updateAttempt = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * Update guess document based on win attempt number
+ * this will be called after cookie check
+ */
+userController.updateGuess = async (req: Request, res: Response, next: NextFunction) => {
+  var attemptIncrement = 0
   if (!res.locals.isCorrect) {
     // increase attempt
-    const userId = res.locals.userId
-    const currentGuess = res.locals.guess
-    const attempt = res.locals.attempt
-    const updateDetails = await Guess.updateOne(
-      { userId: new ObjectId(userId) },
-      {
-        $inc: { 'attempt': 1 },  // increment attempt by one
-        $set: {   // keep the document, but modify one field
-          [`guesses.${attempt}`]: currentGuess
-        }
-      }
-    )
-
-    console.log("userController.updateAttempt: updateDetails = ")
-    console.log(updateDetails)
-    return next()
-    // const updatedScore: IScore = req.body
+    attemptIncrement = 1
   }
-  // Else: correct answer so go to userController.updateScore!
+  const userId = res.locals.userId
+  const attempt = res.locals.attempt
+  const currentGuess = res.locals.guess
+  const updateDetails = await Guess.updateOne(
+    { userId: new ObjectId(userId) },
+    {
+      // increment attempt if guess is wrong; otherwise, don't increment
+      $inc: { 'attempt': attemptIncrement },  
+      $set: {  // keep the document, but modify one field
+        [`guesses.${attempt}`]: currentGuess
+      }
+    }
+  )
+
+  console.log("userController.updateGuess: updateDetails = ")
+  console.log(updateDetails)
   next()
 }
 
+
+/**
+ * Update score document if guess is correct
+ */
 userController.updateScore = async (req: Request, res: Response, next: NextFunction) => {
   if (res.locals.isCorrect) {
     // increase attempt
@@ -225,7 +251,7 @@ userController.updateScore = async (req: Request, res: Response, next: NextFunct
     console.log('userController.updateScore: score increased by one')
     return next()
   }
-  // Else: wrong answer so handled alraedy by to userController.updateAttempt!
+  // Else: wrong answer so handled alraedy by to userController.updateGuess!
   next()
 }
 

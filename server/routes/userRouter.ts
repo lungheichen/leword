@@ -7,11 +7,16 @@ import userValidation from '../validations/userValidation'
 // var router = express.Router();
 const router = express.Router()
 
-// /* Get board */
-// router.get('/', function(req: Request, res: Response) {
-//   res.status(200).json({res.locals.board})
-// });
 
+/* Get guesses for the board */
+router.get(
+  '/', 
+  sessionController.isLoggedIn,
+  userController.getSavedGuesses,
+  // Get colors next?
+  function(req: Request, res: Response) {
+  res.status(200).json(res.locals.guesses)
+})
 
 
 /**
@@ -67,7 +72,7 @@ router.patch(
   userController.compareGuess,  // check based on date or answer_id
   // and pass right or wrong
   userController.getCurrentAttempt,
-  userController.updateAttempt,  // update attempt if guess is wrong
+  userController.updateGuess,  // update guess document and attempt count
   userController.updateScore,  // update score if guess is correct
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.colors)
@@ -92,7 +97,7 @@ router.put(
  * Get all users
  */
 router.get(
-  '/',
+  '/all',
   // gather past data
   userController.getUsers, // Currently is doing the validation
   // userValidation.foundUser,
