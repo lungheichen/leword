@@ -50,7 +50,34 @@ function App() {
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
 
-  const getSavedGuesses = () => {
+  const AddGuessesToBoard = (savedGuesses: ISavedGuesses) => {
+
+    console.log(`savedGuesses = `);
+    console.log(savedGuesses);
+    var boardComplete = true;
+
+    for (let i = 1; i < guesses.length + 1; i++) {
+      // const stringI: string = i.toString()
+      const currGuess = savedGuesses[i];
+      console.log(`currGuess = ${currGuess} for i = ${i}`);
+      if (currGuess === '' ) {
+        boardComplete = false;
+        setRowInd(i - 1);
+        break;
+      }
+      blankLetters[i - 1] = currGuess.toUpperCase();
+    }
+    
+    // disable guessing if all 6 guesses were fetched
+    if (boardComplete) setRowInd(6);
+
+    setGuesses(blankLetters);
+    console.log(guesses);
+    return;
+  }
+
+
+  const getSavedGuesses = async () => {
     const uri = `${process.env.REACT_APP_SERVER}/user`;
     if (!uri) {
       return;
@@ -65,24 +92,8 @@ function App() {
     })
       .then(res => res.json())
       .then((savedGuesses: ISavedGuesses) => {
-        console.log(`savedGuesses = `)
-        console.log(savedGuesses)
-        // stopped here
-        for (let i = 1; i < guesses.length + 1; i++) {        
-          
-          // const stringI: string = i.toString()
-          const currGuess = savedGuesses[i]
-          console.log(`currGuess = ${currGuess} for i = ${i}`)
-          if (currGuess === '') {
-            setRowInd(i - 1)
-            break
-          }
-          blankLetters[i - 1] = currGuess.toUpperCase()
-        }
-
-        setGuesses(blankLetters);
-        console.log(guesses)
-        return;
+        // set row and guesses
+        AddGuessesToBoard(savedGuesses)
       })
       .catch(err => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   }
@@ -103,8 +114,6 @@ function App() {
     getSavedGuesses();  // fetch saved guesses
     console.log("getWord and getSavedGuesses ran")
     // get colors
-
-    // guessesToBoard(guesses);
 
     // apply colors to board
 
