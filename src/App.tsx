@@ -9,6 +9,10 @@ import getKeyboardColors from './Helpers/getKeyboardColors';
 import dictWords from './Assets/dict';
 
 // console.log(fs);
+ 
+interface ISavedGuesses {
+  [index: string]: string;
+}
 
 
 function App() {
@@ -24,7 +28,7 @@ function App() {
   //     console.log(text[1]);
   // })  
 
-  const blankLetters = [];
+  const blankLetters: string[] = [];
   for (let i = 0; i < 6; i += 1) {
     blankLetters.push('     ');
   }
@@ -46,18 +50,65 @@ function App() {
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
 
+  const getSavedGuesses = () => {
+    const uri = `${process.env.REACT_APP_SERVER}/user`;
+    if (!uri) {
+      return;
+    }
+  
+    fetch(uri, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(res => res.json())
+      .then((savedGuesses: ISavedGuesses) => {
+        console.log(`savedGuesses = `)
+        console.log(savedGuesses)
+        // stopped here
+        for (let i = 1; i < guesses.length + 1; i++) {        
+          
+          // const stringI: string = i.toString()
+          const currGuess = savedGuesses[i]
+          console.log(`currGuess = ${currGuess} for i = ${i}`)
+          if (currGuess === '') {
+            setRowInd(i - 1)
+            break
+          }
+          blankLetters[i - 1] = currGuess.toUpperCase()
+        }
+
+        setGuesses(blankLetters);
+        console.log(guesses)
+        return;
+      })
+      .catch(err => console.log('App.componentDidMount: get guesses: ERROR: ', err));
+  }
+
+  // const guessesToBoard = (savedGuesses) => {
+
+  // }
+
   const getWord = () => {
-    // depreciated; don't want the user to have the password
+    // depreciated; don't want the user to have the answer
     setWord('APPLE');
   };
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Update the document title using the browser API
-    if (word === '') {
-      getWord();
-    }
-    console.log(word);
+    getWord();  // remove this eventually once board and colors are fetched from server
+    getSavedGuesses();  // fetch saved guesses
+    console.log("getWord and getSavedGuesses ran")
+    // get colors
+
+    // guessesToBoard(guesses);
+
+    // apply colors to board
+
+
   }, []);
 
   const handleGuess = (letter: string) => {
@@ -132,22 +183,6 @@ function App() {
     setKeyInd(0);
   };
 
-  // const handleLogin = () => {
-  //   fetch('/user', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ username, password }),
-  //     headers: {'Content-Type': 'application/json'},
-  //   })
-  //   .then(res => {
-  //     if(res.status === 200) {
-  //       dispatch(createMarket(marketId, location));
-  //     } else {
-  //       console.log('in createMarketThunk - Server returned status', res.status)
-  //     }
-  //   })  
-  //   .catch(err => console.log('Error in createMarketThunk fetch:', err));
-    
-  // }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
