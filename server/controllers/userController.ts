@@ -42,6 +42,15 @@ userController.getUser = async (req: Request, res: Response, next: NextFunction)
 
 
 /**
+ * Get answer and put it into res.locals
+ * Can be from database or read from local file
+ */
+userController.getAnswer = (req: Request, res: Response, next: NextFunction) => {
+  res.locals.answer = 'apple'
+  next()
+}
+
+/**
  * Get saved guesses for login and when returning to a daily game
  * this will be called after cookie check
  */
@@ -59,6 +68,37 @@ userController.getSavedGuesses = async (req: Request, res: Response, next: NextF
     })
   }
   res.locals.guesses = guess.guesses
+  next()
+}
+
+
+/**
+ * Determine colors for all guesses at once
+ * Place them in res.locals.colorsArr
+ */
+userController.getColors = async (req: Request, res: Response, next: NextFunction) => {
+  const guesses: IGuess['guesses'] = res.locals.guesses
+  const answer = res.locals.answer
+
+  var colorsArr = []
+  // for each guess, determine color
+  for (let i = 1; i < guesses.size + 1; i++) {
+    const guess = guesses.get(i.toString())
+    if (!guess) {
+      console.log(`userController.getColors: guesses didn't find key ${i}`)
+      continue
+    }
+    console.log(`userController.compareGuess: guess = ${guess}`)
+    // Set up database for daily answers to compare to
+    // set up so that database...
+    
+    // build array of string of letters representing colors to send back in json
+    const colors = getGuessColors(answer, guess)
+    colorsArr.push(colors)
+  }
+
+  res.locals.colorsArr = colorsArr
+
   next()
 }
 
@@ -167,7 +207,7 @@ userController.updateUser = async (req: Request, res: Response, next: NextFuncti
 userController.compareGuess = (req: Request, res: Response, next: NextFunction) => {
   const guess: string = req.body.guess.toLowerCase()
   console.log(`userController.compareGuess: guess = ${guess}`)
-  const answer = 'apple'
+  const answer = res.locals.answer
   // Set up database for daily answers to compare to
   // set up so that database...
   

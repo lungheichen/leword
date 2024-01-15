@@ -77,7 +77,7 @@ function App() {
   }
 
 
-  const getSavedGuesses = async () => {
+  const getSavedGuessesAndColors = async () => {
     const uri = `${process.env.REACT_APP_SERVER}/user`;
     if (!uri) {
       return;
@@ -91,10 +91,16 @@ function App() {
       },
     })
       .then(res => res.json())
-      .then((savedGuesses: ISavedGuesses) => {
+      .then((data) => {
+        console.log("getSavedGuessesAndColors: data = ")
+        console.log(data)
+        const savedGuesses: ISavedGuesses = data.guesses
         // set row and guesses
         AddGuessesToBoard(savedGuesses)
-      })
+        // get colors
+
+        // apply colors to board
+  })
       .catch(err => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   }
 
@@ -111,11 +117,10 @@ function App() {
   useEffect(() => {
     // Update the document title using the browser API
     getWord();  // remove this eventually once board and colors are fetched from server
-    getSavedGuesses();  // fetch saved guesses
-    console.log("getWord and getSavedGuesses ran")
-    // get colors
-
-    // apply colors to board
+    // might need to just GET both guesses and colors together
+    // then handle them
+    getSavedGuessesAndColors();  // fetch saved guesses and their colors
+    console.log("getWord and getSavedGuessesAndColors ran")
 
 
   }, []);

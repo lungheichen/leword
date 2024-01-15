@@ -13,9 +13,15 @@ router.get(
   '/', 
   sessionController.isLoggedIn,
   userController.getSavedGuesses,
-  // Get colors next?
+  userController.getAnswer,
+  userController.getColors,
   function(req: Request, res: Response) {
-  res.status(200).json(res.locals.guesses)
+    // respond with guesses and colorsArr
+    const guessesAndColors = {
+      guesses: res.locals.guesses,
+      colorsArr: res.locals.colorsArr
+    }
+    res.status(200).json(guessesAndColors)
 })
 
 
@@ -69,6 +75,7 @@ router.post(
 router.patch(
   '/guess/',
   sessionController.isLoggedIn,
+  userController.getAnswer,
   userController.compareGuess,  // check based on date or answer_id
   // and pass right or wrong
   userController.getCurrentAttempt,
