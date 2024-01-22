@@ -10,7 +10,7 @@ const getKeyboardColors = (keyboardColors: {[letters: string]: string}, guess: s
     const rankGuess = colorRank[guessColors[i]];
     const rankKeyboardLetter = colorRank[keyboardColors[guess[i]]];
     if (rankGuess > rankKeyboardLetter) {
-      keyboardColors[guess[i]] = guessColors[i]
+      keyboardColors[guess[i]] = guessColors[i];
     }
   }
   return keyboardColors;

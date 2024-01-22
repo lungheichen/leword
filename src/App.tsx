@@ -26,8 +26,11 @@ function App() {
   //   .then((r) => r.text())
   //   .then(text  => {
   //     console.log(text[1]);
-  // })  
-
+  // })
+  
+  // Get board letters
+  // Array of 6 strings
+  // eventually should convert to array of arrays for improvement of time complexity and consistency with board colors array
   const blankLetters: string[] = [];
   for (let i = 0; i < 6; i += 1) {
     blankLetters.push('     ');
@@ -37,12 +40,15 @@ function App() {
   const [guesses, setGuesses] = useState(blankLetters);
 
   // Get board colors
-  const blankColors = [];
+  // Array of 6 rows/arrays of 6 letters 
+  const blankColors: string[][] = [];
   for (let i = 0; i < 6; i += 1) {
     blankColors.push([' ', ' ', ' ', ' ', ' ']);
   }
   const [boardColors, setBoardColors] = useState(blankColors);
 
+  // Get keyboard colors
+  // Key-value pairs of letter: color-letter
   const blankColorDict: { [letter: string]: string } = {};
   for (let c = 65; c <= 90; c += 1) {
     blankColorDict[String.fromCharCode(c)] = ' ';
@@ -50,29 +56,26 @@ function App() {
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
 
-  const AddGuessesToBoard = (savedGuesses: ISavedGuesses) => {
+  const UpdateBoardandKeyboard = (savedGuesses: ISavedGuesses, savedColors: string[][]) => {
 
-    console.log(`savedGuesses = `);
-    console.log(savedGuesses);
-    var boardComplete = true;
-
-    for (let i = 1; i < guesses.length + 1; i++) {
-      // const stringI: string = i.toString()
+    for (let i = 1; i < savedColors.length + 1; i++) {
       const currGuess = savedGuesses[i];
       console.log(`currGuess = ${currGuess} for i = ${i}`);
-      if (currGuess === '' ) {
-        boardComplete = false;
-        setRowInd(i - 1);
-        break;
-      }
       blankLetters[i - 1] = currGuess.toUpperCase();
+      
+      blankColors[i - 1] = savedColors[i - 1];
+      console.log(`blankColors = ${blankColors[i - 1]} for i = ${i - 1}`);
+      
+      // Update keyboard colors after each board row is filled
+      // This is needed as keyboard colors are ranked based on
+      // It's possible to move it outside the forloop, but that's additional
+      //  memory to create a new keyboard-color object 
+      setKeyboardColors(getKeyboardColors(keyboardColors, savedGuesses[i].toUpperCase(), savedColors[i - 1]))
     }
     
-    // disable guessing if all 6 guesses were fetched
-    if (boardComplete) setRowInd(6);
-
-    setGuesses(blankLetters);
-    console.log(guesses);
+    setRowInd(savedColors.length)
+    setBoardColors(blankColors);
+    setGuesses(blankLetters);  // set guesses last which reloads page
     return;
   }
 
@@ -94,19 +97,13 @@ function App() {
       .then((data) => {
         console.log("getSavedGuessesAndColors: data = ")
         console.log(data)
-        const savedGuesses: ISavedGuesses = data.guesses
-        // set row and guesses
-        AddGuessesToBoard(savedGuesses)
-        // get colors
-
-        // apply colors to board
+        const savedGuesses: ISavedGuesses = data.guesses;
+        const savedColors = data.colorsArr;
+        UpdateBoardandKeyboard(savedGuesses, savedColors);
   })
       .catch(err => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   }
 
-  // const guessesToBoard = (savedGuesses) => {
-
-  // }
 
   const getWord = () => {
     // depreciated; don't want the user to have the answer
@@ -121,6 +118,9 @@ function App() {
     // then handle them
     getSavedGuessesAndColors();  // fetch saved guesses and their colors
     console.log("getWord and getSavedGuessesAndColors ran")
+
+    // make updates
+    flushSync(() => {});
 
 
   }, []);
