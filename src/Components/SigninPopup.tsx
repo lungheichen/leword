@@ -12,6 +12,7 @@ interface ICredentials {
 }
 
 async function loginUser(credentials: ICredentials) {
+  // Need to add a way to run getSavedResults after authentication
   const uri = `${process.env.REACT_APP_SERVER}/user`;
   console.log(`React signin POST request: ${JSON.stringify(credentials)}`)
   if (!uri) {
