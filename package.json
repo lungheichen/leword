@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-mongo": "sudo service mongod start",
+    "mongo": "sudo service mongod start",
     "mongosh": "mongosh --username lwadmin --password admin --host localhost --port 27017 leword"
   },
   "eslintConfig": {
