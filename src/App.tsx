@@ -19,7 +19,7 @@ function App() {
   const [guess, setGuess] = useState(''); // Could be renamed currentGuess
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
-  const [word, setWord] = useState('');
+  // const [word, setWord] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dictSet = new Set(dictWords);
   // fetch('./Assets/dict.txt')
@@ -94,8 +94,7 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('getSavedGuessesAndColors: data = ');
-        console.log(data);
+        // Get saved guesses and colors for board and keyboard
         const savedGuesses: ISavedGuesses = data.guesses;
         const savedColors = data.colorsArr;
         setIsLoggedIn(data.isLoggedIn);
@@ -104,15 +103,15 @@ function App() {
       .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   };
 
-  const getWord = () => {
-    // depreciated; don't want the user to have the answer
-    setWord('APPLE');
-  };
+  // const getWord = () => {
+  //   // depreciated; don't want the user to have the answer
+  //   setWord('APPLE');
+  // };
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Update the document title using the browser API
-    getWord(); // remove this eventually once board and colors are fetched from server
+    // getWord(); // remove this eventually once board and colors are fetched from server
     // might need to just GET both guesses and colors together
     // then handle them
     getSavedGuessesAndColors(); // fetch saved guesses and their colors
@@ -150,7 +149,7 @@ function App() {
       const colorsTemp = boardColors;
       // Submit get request with body containing guess
       // response of colors as array of letters representing colors
-      const colors: string[] = await guessCheck(word, guess);
+      const colors: string[] = await guessCheck(guess);
       console.log(`client: colors = `);
       console.log(colors);
       if (colors.length !== 5) {
