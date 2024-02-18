@@ -9,11 +9,10 @@ import getKeyboardColors from './Helpers/getKeyboardColors';
 import dictWords from './Assets/dict';
 
 // console.log(fs);
- 
+
 interface ISavedGuesses {
   [index: string]: string;
 }
-
 
 function App() {
   // const [logger, setLogger] = useState('logger spot');
@@ -21,13 +20,14 @@ function App() {
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
   const [word, setWord] = useState('');
-  const dictSet = new Set(dictWords)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dictSet = new Set(dictWords);
   // fetch('./Assets/dict.txt')
   //   .then((r) => r.text())
   //   .then(text  => {
   //     console.log(text[1]);
   // })
-  
+
   // Get board letters
   // Array of 6 strings
   // eventually should convert to array of arrays for improvement of time complexity and consistency with board colors array
@@ -40,7 +40,7 @@ function App() {
   const [guesses, setGuesses] = useState(blankLetters);
 
   // Get board colors
-  // Array of 6 rows/arrays of 6 letters 
+  // Array of 6 rows/arrays of 6 letters
   const blankColors: string[][] = [];
   for (let i = 0; i < 6; i += 1) {
     blankColors.push([' ', ' ', ' ', ' ', ' ']);
@@ -55,55 +55,54 @@ function App() {
   }
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
-
   const UpdateBoardandKeyboard = (savedGuesses: ISavedGuesses, savedColors: string[][]) => {
-
     for (let i = 1; i < savedColors.length + 1; i++) {
       const currGuess = savedGuesses[i];
       console.log(`currGuess = ${currGuess} for i = ${i}`);
       blankLetters[i - 1] = currGuess.toUpperCase();
-      
+
       blankColors[i - 1] = savedColors[i - 1];
       console.log(`blankColors = ${blankColors[i - 1]} for i = ${i - 1}`);
-      
+
       // Update keyboard colors after each board row is filled
       // This is needed as keyboard colors are ranked based on
       // It's possible to move it outside the forloop, but that's additional
-      //  memory to create a new keyboard-color object 
-      setKeyboardColors(getKeyboardColors(keyboardColors, savedGuesses[i].toUpperCase(), savedColors[i - 1]))
+      //  memory to create a new keyboard-color object
+      setKeyboardColors(
+        getKeyboardColors(keyboardColors, savedGuesses[i].toUpperCase(), savedColors[i - 1]),
+      );
     }
-    
-    setRowInd(savedColors.length)
-    setBoardColors(blankColors);
-    setGuesses(blankLetters);  // set guesses last which reloads page
-    return;
-  }
 
+    setRowInd(savedColors.length);
+    setBoardColors(blankColors);
+    setGuesses(blankLetters); // set guesses last which reloads page
+    return;
+  };
 
   const getSavedGuessesAndColors = async () => {
     const uri = `${process.env.REACT_APP_SERVER}/user`;
     if (!uri) {
       return;
     }
-  
+
     fetch(uri, {
       method: 'GET',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((data) => {
-        console.log("getSavedGuessesAndColors: data = ")
-        console.log(data)
+        console.log('getSavedGuessesAndColors: data = ');
+        console.log(data);
         const savedGuesses: ISavedGuesses = data.guesses;
         const savedColors = data.colorsArr;
+        setIsLoggedIn(data.isLoggedIn);
         UpdateBoardandKeyboard(savedGuesses, savedColors);
-  })
-      .catch(err => console.log('App.componentDidMount: get guesses: ERROR: ', err));
-  }
-
+      })
+      .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
+  };
 
   const getWord = () => {
     // depreciated; don't want the user to have the answer
@@ -113,16 +112,14 @@ function App() {
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Update the document title using the browser API
-    getWord();  // remove this eventually once board and colors are fetched from server
+    getWord(); // remove this eventually once board and colors are fetched from server
     // might need to just GET both guesses and colors together
     // then handle them
-    getSavedGuessesAndColors();  // fetch saved guesses and their colors
-    console.log("getWord and getSavedGuessesAndColors ran")
+    getSavedGuessesAndColors(); // fetch saved guesses and their colors
+    console.log('getWord and getSavedGuessesAndColors ran');
 
     // make updates
     flushSync(() => {});
-
-
   }, []);
 
   const handleGuess = (letter: string) => {
@@ -137,12 +134,12 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    console.log(guess.toLowerCase())
+    console.log(guess.toLowerCase());
     if (keyInd === 5) {
       // check if word is in dictSet first
-      if (!(dictSet.has(guess.toLowerCase()))) {
-        console.log('word not in dictionary; try again')
-        return
+      if (!dictSet.has(guess.toLowerCase())) {
+        console.log('word not in dictionary; try again');
+        return;
       }
       // Set in the current guess to the current row
       const temp = guesses;
@@ -153,14 +150,14 @@ function App() {
       const colorsTemp = boardColors;
       // Submit get request with body containing guess
       // response of colors as array of letters representing colors
-      const colors: string[] = await guessCheck(word, guess)
-      console.log(`client: colors = `)
-      console.log(colors)
+      const colors: string[] = await guessCheck(word, guess);
+      console.log(`client: colors = `);
+      console.log(colors);
       if (colors.length !== 5) {
-        return
+        return;
       }
 
-      colorsTemp[rowInd] = colors
+      colorsTemp[rowInd] = colors;
       setBoardColors(colorsTemp);
       // I think this should also output the colors for the keyboard, though it may make this messier.  Use a dict of letters A-Z?
 
@@ -168,7 +165,7 @@ function App() {
       for (let i = 0; i < 5; i++) {
         if (colors[i] !== 'g') {
           guessIsCorrect = false;
-          break
+          break;
         }
       }
 
@@ -196,7 +193,6 @@ function App() {
     setGuess('');
     setKeyInd(0);
   };
-
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -233,7 +229,7 @@ function App() {
   return (
     // <div className="App" onKeyDown={handleKeyDown}>
     <div className="App">
-      <Header/>
+      <Header isLoggedIn={isLoggedIn} />
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
       {/* <div className="Debug">
         <p>{logger}</p>
@@ -241,7 +237,12 @@ function App() {
         <p>keyInd: {keyInd}</p>
         <p>rowInd: {rowInd}</p>
       </div> */}
-      <Keyboard handleGuess={handleGuess} handleSubmit={handleSubmit} handleClear={handleClear} keyboardColors={keyboardColors} />
+      <Keyboard
+        handleGuess={handleGuess}
+        handleSubmit={handleSubmit}
+        handleClear={handleClear}
+        keyboardColors={keyboardColors}
+      />
     </div>
   );
 }

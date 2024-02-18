@@ -9,6 +9,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
   if (!req.cookies.ssid) {
     // return res.render('./../client/signup', {error: 'cookies missing; please sign up or log in again'})
     console.log('cookies missing; please sign up or log in again')
+    res.locals.isLoggedIn = false
   }
   const ssid = req.cookies.ssid
   jwt.verify(ssid, 'secret2000', (err: any, decoded: any) => {
@@ -22,6 +23,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
     } else {
       console.log(decoded)
       res.locals.userId = decoded.cookieId
+      res.locals.isLoggedIn = true
       console.log(`sessionController.isLoggedIn: res.locals.userId = ${res.locals.userId}`)
       next()
     }

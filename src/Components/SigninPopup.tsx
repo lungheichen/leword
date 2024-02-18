@@ -14,50 +14,48 @@ interface ICredentials {
 async function loginUser(credentials: ICredentials) {
   // Need to add a way to run getSavedResults after authentication
   const uri = `${process.env.REACT_APP_SERVER}/user`;
-  console.log(`React signin POST request: ${JSON.stringify(credentials)}`)
+  console.log(`React signin POST request: ${JSON.stringify(credentials)}`);
   if (!uri) {
-    return
+    return;
   }
   return fetch(uri, {
     method: 'POST',
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials)
+    body: JSON.stringify(credentials),
   })
-    .then(data => data.json())
-    .catch(err => console.log('loginUser: fetch /user: ERROR: ', err));
- }
+    .then((data) => data.json())
+    .catch((err) => console.log('loginUser: fetch /user: ERROR: ', err));
+}
 
 function SigninPopup() {
   // const handleClick = () => {
-    // if (props.handleGuess) {
-    //   props.handleGuess(props.letter)
-    // }
+  // if (props.handleGuess) {
+  //   props.handleGuess(props.letter)
+  // }
 
-    // Open window
+  // Open window
   // }x
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
-  const [name, setName] = useState("");
-  const [pass, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [pass, setPassword] = useState('');
 
-
-  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = await loginUser({
       name,
-      pass
+      pass,
     });
-    console.log(token)
+    console.log(token);
     // setToken(token);
-  }
-
+  };
 
   return (
     <div>
-      <button type="button" className="button modal-button" onClick={() => setOpen(o => !o)}>
+      <button type="button" className="button modal-button" onClick={() => setOpen((o) => !o)}>
         Sign In
       </button>
       <Popup open={open} closeOnDocumentClick onClose={closeModal} modal>
@@ -69,23 +67,25 @@ function SigninPopup() {
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name">Username: </label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name" 
+              <input
+                type="text"
+                id="name"
+                name="name"
                 size={10}
-                onKeyDown={e => e.stopPropagation()}
-                onChange={e => setName(e.target.value)}/>
+                onKeyDown={(e) => e.stopPropagation()}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="password">Password: </label>
-              <input 
-                type="password" 
-                id="password" 
-                name="pass" 
-                value={pass} 
-                onKeyDown={e => e.stopPropagation()} 
-                onChange={e => setPassword(e.target.value)} />
+              <input
+                type="password"
+                id="password"
+                name="pass"
+                value={pass}
+                onKeyDown={(e) => e.stopPropagation()}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <button type="submit">Submit form</button>
           </form>

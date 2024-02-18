@@ -8,7 +8,7 @@ import userValidation from '../validations/userValidation'
 const router = express.Router()
 
 
-/* Get guesses for the board */
+/* Get guesses for the board upon visiting main page */
 router.get(
   '/', 
   sessionController.isLoggedIn,
@@ -18,6 +18,7 @@ router.get(
   function(req: Request, res: Response) {
     // respond with guesses and colorsArr
     const guessesAndColors = {
+      isLoggedIn: res.locals.isLoggedIn,
       guesses: res.locals.guesses,
       colorsArr: res.locals.colorsArr
     }
@@ -26,6 +27,7 @@ router.get(
 
 
 /**
+ * Login.
  * Post request to authenticate user with password,
  * then store user id in a cookie,
  * and create and save a new session into the database
