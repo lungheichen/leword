@@ -8,9 +8,19 @@ import userValidation from '../validations/userValidation'
 const router = express.Router()
 
 
-/* Get guesses for the board upon visiting main page */
+/* When user opens the main page, just check if user is logged in */
 router.get(
   '/', 
+  sessionController.isLoggedIn,
+  function(req: Request, res: Response) {
+    // respond with whether user is logged in
+    res.status(200).json(res.locals.isLoggedIn)
+})
+
+
+/* Get guesses for the board if user is logged in */
+router.get(
+  '/data', 
   sessionController.isLoggedIn,
   userController.getSavedGuesses,
   userController.getAnswer,
@@ -18,7 +28,6 @@ router.get(
   function(req: Request, res: Response) {
     // respond with guesses and colorsArr
     const guessesAndColors = {
-      isLoggedIn: res.locals.isLoggedIn,
       guesses: res.locals.guesses,
       colorsArr: res.locals.colorsArr
     }

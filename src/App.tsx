@@ -15,7 +15,6 @@ interface ISavedGuesses {
 }
 
 function App() {
-  // const [logger, setLogger] = useState('logger spot');
   const [guess, setGuess] = useState(''); // Could be renamed currentGuess
   const [keyInd, setKeyInd] = useState(0);
   const [rowInd, setRowInd] = useState(0);
@@ -80,7 +79,8 @@ function App() {
   };
 
   const getSavedGuessesAndColors = async () => {
-    const uri = `${process.env.REACT_APP_SERVER}/user`;
+    // Check if logged in, then get saved guesses and colors
+    const uri = `${process.env.REACT_APP_SERVER}/user/data`;
     if (!uri) {
       return;
     }
@@ -97,25 +97,43 @@ function App() {
         // Get saved guesses and colors for board and keyboard
         const savedGuesses: ISavedGuesses = data.guesses;
         const savedColors = data.colorsArr;
-        setIsLoggedIn(data.isLoggedIn);
         UpdateBoardandKeyboard(savedGuesses, savedColors);
       })
       .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   };
 
-  // const getWord = () => {
-  //   // depreciated; don't want the user to have the answer
-  //   setWord('APPLE');
-  // };
+  // Check log in.  If logged in, get saved board and keyboard data
+  const startupSteps = async () => {
+    const uri = `${process.env.REACT_APP_SERVER}/user`;
+    if (!uri) {
+      return;
+    }
+    fetch(uri, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((isLoggedInData) => {
+        // Get saved guesses and colors for board and keyboard
+        setIsLoggedIn(isLoggedInData);
+        // Cannot use isLoggedIn yet because it may not have updated
+        if (isLoggedInData) {
+          getSavedGuessesAndColors();
+        }
+      })
+      .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
+  };
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Update the document title using the browser API
-    // getWord(); // remove this eventually once board and colors are fetched from server
     // might need to just GET both guesses and colors together
     // then handle them
-    getSavedGuessesAndColors(); // fetch saved guesses and their colors
-    console.log('getWord and getSavedGuessesAndColors ran');
+    startupSteps(); // fetch saved guesses and their colors
+    console.log('getSavedGuessesAndColors ran');
 
     // make updates
     flushSync(() => {});
@@ -226,16 +244,9 @@ function App() {
   // }, [handleKeyDown]);  // needs handleKeyDown function to be outside of useEffect
 
   return (
-    // <div className="App" onKeyDown={handleKeyDown}>
     <div className="App">
       <Header isLoggedIn={isLoggedIn} />
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
-      {/* <div className="Debug">
-        <p>{logger}</p>
-        <p>{guessCheck(word, guess)}</p>
-        <p>keyInd: {keyInd}</p>
-        <p>rowInd: {rowInd}</p>
-      </div> */}
       <Keyboard
         handleGuess={handleGuess}
         handleSubmit={handleSubmit}

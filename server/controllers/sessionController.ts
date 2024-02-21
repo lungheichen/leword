@@ -10,6 +10,7 @@ sessionController.isLoggedIn = (req: Request, res: Response, next: NextFunction)
     // return res.render('./../client/signup', {error: 'cookies missing; please sign up or log in again'})
     console.log('cookies missing; please sign up or log in again')
     res.locals.isLoggedIn = false
+    return next()
   }
   const ssid = req.cookies.ssid
   jwt.verify(ssid, 'secret2000', (err: any, decoded: any) => {
