@@ -133,7 +133,7 @@ function App() {
     // might need to just GET both guesses and colors together
     // then handle them
     startupSteps(); // fetch saved guesses and their colors
-    console.log('getSavedGuessesAndColors ran');
+    console.log('startupSteps ran');
 
     // make updates
     flushSync(() => {});
