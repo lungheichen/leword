@@ -7,30 +7,10 @@ import 'reactjs-popup/dist/index.css';
 // }
 
 interface ICredentials {
-  name: string;
-  pass: string;
+  loginUser: Function;
 }
 
-async function loginUser(credentials: ICredentials) {
-  // Need to add a way to run getSavedResults after authentication
-  const uri = `${process.env.REACT_APP_SERVER}/user`;
-  console.log(`React signin POST request: ${JSON.stringify(credentials)}`);
-  if (!uri) {
-    return;
-  }
-  return fetch(uri, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-  })
-    .then((data) => data.json())
-    .catch((err) => console.log('loginUser: fetch /user: ERROR: ', err));
-}
-
-function SigninPopup() {
+function SigninPopup(props: ICredentials) {
   // const handleClick = () => {
   // if (props.handleGuess) {
   //   props.handleGuess(props.letter)
@@ -45,7 +25,7 @@ function SigninPopup() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = await loginUser({
+    const token = await props.loginUser({
       name,
       pass,
     });

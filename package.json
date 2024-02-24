@@ -35,7 +35,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "mongo": "sudo service mongod start",
-    "mongosh": "mongosh --username lwadmin --password admin --host localhost --port 27017 leword"
+    "mongosh": "mongosh --username lwadmin --password admin --host localhost --port 27017 leword",
+    "check-used-ports": "sudo lsof -i -P -n | grep LISTEN"
   },
   "eslintConfig": {
     "extends": [

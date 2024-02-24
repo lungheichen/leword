@@ -3,14 +3,14 @@ import SigninPopup from './SigninPopup';
 
 interface IRightHeader {
   isLoggedIn: boolean;
+  loginUser: Function;
 }
 
 function RightHeader(props: IRightHeader) {
   // Get fetched props.isLoggedIn noting whether user is still logged in
   var SignUpBox;
-  console.log(`props.isLoggedIn = ${props.isLoggedIn}`)
   if (!props.isLoggedIn) {
-    SignUpBox = <SigninPopup />;
+    SignUpBox = <SigninPopup loginUser={props.loginUser} />;
   } else {
     SignUpBox = <div>Signed In!</div>;
   }

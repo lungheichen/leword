@@ -102,6 +102,36 @@ function App() {
       .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
   };
 
+  interface ICredentials {
+    name: string;
+    pass: string;
+  }
+
+  // POST request to login for page data
+  async function loginUser(credentials: ICredentials) {
+    // Need to add a way to run getSavedResults after authentication
+    const uri = `${process.env.REACT_APP_SERVER}/user`;
+    console.log(`React signin POST request: ${JSON.stringify(credentials)}`);
+    if (!uri) {
+      return;
+    }
+    const login = await fetch(uri, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log('loginUser: fetch /user: ERROR: ', err));
+
+    if (login) {
+      getSavedGuessesAndColors();
+    }
+    return;
+  }
+
   // Check log in.  If logged in, get saved board and keyboard data
   const startupSteps = async () => {
     const uri = `${process.env.REACT_APP_SERVER}/user`;
@@ -245,7 +275,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} />
+      <Header isLoggedIn={isLoggedIn} loginUser={loginUser} />
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
       <Keyboard
         handleGuess={handleGuess}

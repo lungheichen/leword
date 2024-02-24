@@ -3,6 +3,7 @@ import RightHeader from './RightHeader';
 
 interface IHeader {
   isLoggedIn: boolean;
+  loginUser: Function;
 }
 
 function Header(props: IHeader) {
@@ -10,7 +11,7 @@ function Header(props: IHeader) {
     <header className="App-header">
       <div className="App-header-div">left</div>
       <div className="App-header-div">Le Word</div>
-      <RightHeader isLoggedIn={props.isLoggedIn} />
+      <RightHeader isLoggedIn={props.isLoggedIn} loginUser={props.loginUser} />
     </header>
   );
 }
