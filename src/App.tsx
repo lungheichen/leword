@@ -54,6 +54,14 @@ function App() {
   }
   const [keyboardColors, setKeyboardColors] = useState(blankColorDict);
 
+  /**
+   * Updates board and keyboard colors with the row index increased by 1. For the board, only the prior row's colors are determined.
+   *
+   * Used after a guess is confirmed.
+   * @param savedGuesses array of strings
+   * @param savedColors array of colors represented by letters
+   * @returns
+   */
   const UpdateBoardandKeyboard = (savedGuesses: ISavedGuesses, savedColors: string[][]) => {
     for (let i = 1; i < savedColors.length + 1; i++) {
       const currGuess = savedGuesses[i];
@@ -78,6 +86,9 @@ function App() {
     return;
   };
 
+  /**
+   * Gets from API saved guesses and the colors representing guess correctness.
+   */
   const getSavedGuessesAndColors = async () => {
     // Check if logged in, then get saved guesses and colors
     const uri = `${process.env.REACT_APP_SERVER}/user/data`;
@@ -107,7 +118,13 @@ function App() {
     pass: string;
   }
 
-  // POST request to login for page data
+  /**
+   * POST request to login for page data
+   * Passed to Header->RightHeader->SigninPopup
+   *
+   * @param credentials object of login data of ICredentials
+   * @returns
+   */
   async function loginUser(credentials: ICredentials) {
     // Need to add a way to run getSavedResults after authentication
     const uri = `${process.env.REACT_APP_SERVER}/user`;
@@ -127,6 +144,32 @@ function App() {
       .catch((err) => console.log('loginUser: fetch /user: ERROR: ', err));
 
     if (login) {
+      setIsLoggedIn(true);
+      getSavedGuessesAndColors();
+    }
+    return;
+  }
+
+  async function signupUser(credentials: ICredentials) {
+    // Need to add a way to run getSavedResults after authentication
+    const uri = `${process.env.REACT_APP_SERVER}/user/create`;
+    console.log(`React signin POST request: ${JSON.stringify(credentials)}`);
+    if (!uri) {
+      return;
+    }
+    const login = await fetch(uri, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log('signupUser: fetch /user: ERROR: ', err));
+
+    if (login) {
+      setIsLoggedIn(true);
       getSavedGuessesAndColors();
     }
     return;
@@ -151,10 +194,24 @@ function App() {
         setIsLoggedIn(isLoggedInData);
         // Cannot use isLoggedIn yet because it may not have updated
         if (isLoggedInData) {
+          console.log('logged in???');
           getSavedGuessesAndColors();
+        } else {
+          // I could just force open the SigninPopup, but I wanted to practice
+          // making a button someone would have to press
+          alert('Please sign in to play');
+          // disable guess key logging
+          // lazy fix; I should be able to just disable key logging
+          setRowInd(6);
         }
       })
-      .catch((err) => console.log('App.componentDidMount: get guesses: ERROR: ', err));
+      .catch((err) =>
+        console.log(
+          'App.componentDidMount: get guesses: ERROR: ',
+          err,
+          '\n\nCheck server for potential issues',
+        ),
+      );
   };
 
   // Similar to componentDidMount and componentDidUpdate:
@@ -275,7 +332,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} loginUser={loginUser} />
+      <Header isLoggedIn={isLoggedIn} loginUser={loginUser} signupUser={signupUser} />
       <Board guess={guess} guesses={guesses} boardColors={boardColors} rowInd={rowInd} />
       <Keyboard
         handleGuess={handleGuess}

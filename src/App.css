@@ -1,3 +1,9 @@
+/**
+ * Ideas:
+ * - maybe I just want the french flag in the background 
+ * - Need to fix the key size when the zoom is huge
+ */
+
 :root {
   --key-border-color: white;
   --key-background-color: #ED2939;
@@ -34,20 +40,31 @@
   color: white;
 }
 
-.App-header-div, .App-right-header {
+.App-header-div {
+  flex-direction: row;
   width: 200px;
-  font-size: calc(10px + 1.25vmin);
+  font-size: calc(20px + 1.25vmin);
   align-items: center;
   min-height: 1vmin;
   display: flex;
   justify-content: center;
   color: white;
+  /* Delete border in the future; just to know where it is */
+  border: solid; 
 }
 
 .App-right-header {
-  /* background-color: #d3826c; */
-  /* align-items: center; */
-  justify-content: ri;
+  flex-direction: row;
+  width: 200px;
+  font-size: calc(10px + 1.25vmin);
+  align-items: center;
+  min-height: 1vmin;
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+  /* Delete border in the future; just to know where it is */
+  border: solid; 
+  gap: 0.5rem;
 }
 
 .App-link {
@@ -84,6 +101,7 @@
   /* border: 1vmin solid #bdd36c; */
   /* More French-colored */
   border: 1vmin solid var(--key-border-color);
+  border-radius: 4px;
   font-size: calc(10px + 2vmin);
   /* flex: 0 0 auto; */
 }
@@ -97,6 +115,7 @@
   background-color: var(--key-background-color);
   font-size: calc(10px + 2vmin);
   border: 1vmin solid var(--key-border-color);
+  border-radius: 4px;
 }
 
 .Board {
@@ -122,6 +141,12 @@
 
 .Debug {
   background-color: #738b7f;
+}
+
+#help-button {
+  height: 30px; 
+  width: 100%;
+  border-radius: 50%;
 }
 
 .modal-button {
